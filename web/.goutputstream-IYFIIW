@@ -1,0 +1,6 @@
+<META http-equiv=Content-Type content="text/html; charset=windows-1251">
+
+<?php
+require("../src/SplClassLoader.php");
+
+# 
