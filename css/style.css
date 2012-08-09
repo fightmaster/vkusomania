@@ -1,0 +1,46 @@
+body
+{
+background-position: center;
+margin:30px;
+padding:0px;
+vertical-align: top;	
+}
+
+
+#day
+{
+color:blue;
+font-size:22px;
+}
+
+#season
+{
+color:red;
+font-size:20px;
+}
+
+#category
+{
+color:orange;
+font-size:18px;
+}
+
+table
+{
+width:900px;
+}
+
+table,td,tr 
+{
+border: 1px solid #145AA7;
+}
+
+table td
+{
+padding-left: 5px;
+}
+
+#kol
+{
+text-align: center;
+}
