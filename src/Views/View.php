@@ -1,5 +1,5 @@
 <?php
-namespace Views;
+namespace src\Views;
 
 class View {
  
