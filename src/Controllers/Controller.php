@@ -1,7 +1,7 @@
 <?php 
-namespace src\Controllers;
-use src\Models\Model;
-use src\Views\View;
+namespace Controllers;
+use Models\Model;
+use Views\View;
 
 class Controller{
 
