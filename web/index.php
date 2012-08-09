@@ -8,7 +8,7 @@
 <body>
 <?php
 
-use src\Controllers\Controller;
+use Controllers\Controller;
 
 error_reporting(E_ALL ^ E_NOTICE);
 
