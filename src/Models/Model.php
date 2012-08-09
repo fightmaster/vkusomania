@@ -1,5 +1,5 @@
 <?php
-namespace Models
+namespace src\Models
 {
 use vendor\obninsk\obninsk_doc;
 class Model {
@@ -10,25 +10,25 @@ class Model {
 
 	function calculate($filepath) 
 	{
-			copy($filepath,"..\menu.doc");
+			copy($filepath,"menu.doc");
 
 			$s="";     
-			$fp = fopen("..\menu.doc",'rb');    
+			$fp = fopen("menu.doc",'rb');    
 
 			while (($fp != false) && !feof($fp)){
-				$s.=fread($fp,filesize("..\menu.doc")); 
+				$s.=fread($fp,filesize("menu.doc")); 
 			}            
 			fclose($fp);
 			$obrabotka = new obninsk_doc;
 			$this->data= $obrabotka->doc($s,0,1);
-			$f = fopen('..\menu.txt', 'w');
+			$f = fopen('menu.txt', 'w');
 			fwrite($f, $this->data);
 			$this->data = $this->massive();    
 	}
         
     function massive()
     {
-			$array = file('..\menu.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$array = file('menu.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 				
 			foreach ($array as $line){
 				if ($line=="·" or  strrpos($line, "0@Pa Å")) {
