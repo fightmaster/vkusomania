@@ -6,20 +6,20 @@ class View {
 	static function displayDefault() 
 	{
             echo "<form method='POST' action='index.php' > ";
-            echo "Введите адрес ссылки меню DOC-файла с http://www.vkusomania.com/site/menu.html :<br><br>";
+            echo "Р’РІРµРґРёС‚Рµ Р°РґСЂРµСЃ СЃСЃС‹Р»РєРё РјРµРЅСЋ DOC-С„Р°Р№Р»Р° СЃ http://www.vkusomania.com/site/menu.html :<br><br>";
             echo "<input type='text' size='65' name='filepath' value='' > ";
-            echo "<input type='submit' name='send' value='Отправить'>";
+            echo "<input type='submit' name='send' value='РћС‚РїСЂР°РІРёС‚СЊ'>";
             echo "</form>";
 	}
 	
 	static function getOrder($doubleMass,$message) 
 	{
-			echo 'Уважаемый '.$doubleMass[person][0].'!<br><br>';
-            echo 'Вы заказали:<br><br>';
+			echo 'РЈРІР°Р¶Р°РµРјС‹Р№ '.$doubleMass[person][0].'!<br><br>';
+            echo 'Р’С‹ Р·Р°РєР°Р·Р°Р»Рё:<br><br>';
 			echo '<table border>';
-			echo '<tr><td>Дата:</td><td>Категория:</td><td>№</td>'
-				.'<td>Наименование:</td><td>Кол-во</td><td>Цена:</td>'
-				.'<td>Кол-во шт.:</td></tr>';
+			echo '<tr><td>Р”Р°С‚Р°:</td><td>РљР°С‚РµРіРѕСЂРёСЏ:</td><td>в„–</td>'
+				.'<td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ:</td><td>РљРѕР»-РІРѕ</td><td>Р¦РµРЅР°:</td>'
+				.'<td>РљРѕР»-РІРѕ С€С‚.:</td></tr>';
 				
 			for ($i=1;$i<=count($doubleMass)-2;$i++){
 				
@@ -31,9 +31,9 @@ class View {
 			}
 			
 			echo '</table>';
-			echo "<br>Итого: ".$doubleMass[itog][0].' руб.';
+			echo "<br>РС‚РѕРіРѕ: ".$doubleMass[itog][0].' СЂСѓР±.';
 			echo "<form method='POST' action='index.php' ><br>";
-			echo "<input type='submit' name='confirm' value='Подтвердить'>";
+			echo "<input type='submit' name='confirm' value='РџРѕРґС‚РІРµСЂРґРёС‚СЊ'>";
 			echo "<input type='hidden' name='zakaz' value='$message'>";
             echo "</form>";
 	}
@@ -41,15 +41,15 @@ class View {
 
 	static function displayError($error) 
 	{
-            echo "<b>Ошибка:</b> {$error}<br>";
-			echo "<a href='http://localhost/vkusomania/web/index.php'>Вернуться назад</a>";
+            echo "<b>РћС€РёР±РєР°:</b> {$error}<br>";
+			echo "<a href='http://localhost/vkusomania/web/index.php'>Р’РµСЂРЅСѓС‚СЊСЃСЏ РЅР°Р·Р°Рґ</a>";
 	}
 	
 	static function Send() 
 	{
-            echo "<b>Спасибо!</b><br>";
-			echo "<b>Ваш заказ отправлен.</b><br>";
-			echo "<a href='http://localhost/vkusomania/web/index.php'>Вернуться на главную...</a>";
+            echo "<b>РЎРїР°СЃРёР±Рѕ!</b><br>";
+			echo "<b>Р’Р°С€ Р·Р°РєР°Р· РѕС‚РїСЂР°РІР»РµРЅ.</b><br>";
+			echo "<a href='http://localhost/vkusomania/web/index.php'>Р’РµСЂРЅСѓС‚СЊСЃСЏ РЅР° РіР»Р°РІРЅСѓСЋ...</a>";
 	}
 
  
@@ -58,33 +58,33 @@ class View {
             if (is_array($results)){
             
 				echo "<form method='POST' action='index.php' > ";
-				echo "Введите ФИО:<br>";
+				echo "Р’РІРµРґРёС‚Рµ Р¤РРћ:<br>";
 				echo "<input type='text' name='FIO' value=''><br>";
 				$num = 1;
 			
                 for ($i=0; $i<count($results)-1; $i++){
 
-                    if( preg_match('/(летнее)?(меню)/i',   $results[$i]) || 
-                        preg_match('/(осеннее)?(меню)/i',  $results[$i]) || 
-                        preg_match('/(зимнее)?(меню)/i',   $results[$i]) ||
-                        preg_match('/(весеннее)?(меню)/i', $results[$i]) ) {
+                    if( preg_match('/(Р»РµС‚РЅРµРµ)?(РјРµРЅСЋ)/i',   $results[$i]) || 
+                        preg_match('/(РѕСЃРµРЅРЅРµРµ)?(РјРµРЅСЋ)/i',  $results[$i]) || 
+                        preg_match('/(Р·РёРјРЅРµРµ)?(РјРµРЅСЋ)/i',   $results[$i]) ||
+                        preg_match('/(РІРµСЃРµРЅРЅРµРµ)?(РјРµРЅСЋ)/i', $results[$i]) ) {
 						
 							$day = $results[$i-1];
 							echo "<br><span id='day' >".$results[$i-1]."</span><br>";
 							echo "<span id='season' >".$results[$i]."</span><br>";
                         
-                    } elseif ( $results[$i] == 'Салаты') {
+                    } elseif ( $results[$i] == 'РЎР°Р»Р°С‚С‹') {
 			
                         echo "<br><span id='category' >".$results[$i]."</span><br>";
 						echo "<table border>";
-						echo '<tr><td>№</td><td>Наименование:</td>'
-							.'<td>Кол-во:</td><td>Цена:</td>'
-							.'<td>Кол-во шт.:</td></tr>';
+						echo '<tr><td>в„–</td><td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ:</td>'
+							.'<td>РљРѕР»-РІРѕ:</td><td>Р¦РµРЅР°:</td>'
+							.'<td>РљРѕР»-РІРѕ С€С‚.:</td></tr>';
 						$food = $results[$i];			
 						$i++;
 									
-						while ( $results[$i]!='Первые блюда' ) {
-							if ( preg_match('/(№)?([0-9]{1,2})$/', $results[$i]) ) { 
+						while ( $results[$i]!='РџРµСЂРІС‹Рµ Р±Р»СЋРґР°' ) {
+							if ( preg_match('/(в„–)?([0-9]{1,2})$/', $results[$i]) ) { 
 								$str = $results[$i];
 								echo "<tr><td>".$results[$i]."</td>";
 								$i++;
@@ -107,16 +107,16 @@ class View {
 											
 						}
 						echo "</table>"; 
-					} elseif ( $results[$i-1] == 'Первые блюда') {
+					} elseif ( $results[$i-1] == 'РџРµСЂРІС‹Рµ Р±Р»СЋРґР°') {
 						$food = $results[$i-1];           
 						echo "<br><span id='category' >".$results[$i-1]."</span><br>";
 						echo "<table border>";
-						echo '<tr><td>№</td><td>Наименование:</td>'
-							.'<td>Кол-во:</td><td>Цена:</td>'
-							.'<td>Кол-во шт.:</td></tr>';	
+						echo '<tr><td>в„–</td><td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ:</td>'
+							.'<td>РљРѕР»-РІРѕ:</td><td>Р¦РµРЅР°:</td>'
+							.'<td>РљРѕР»-РІРѕ С€С‚.:</td></tr>';	
 							
-						while ( $results[$i]!=='Вторые блюда' ) {		
-							if ( preg_match('/(№)?([0-9]{1,2})$/', $results[$i]) ) { 
+						while ( $results[$i]!=='Р’С‚РѕСЂС‹Рµ Р±Р»СЋРґР°' ) {		
+							if ( preg_match('/(в„–)?([0-9]{1,2})$/', $results[$i]) ) { 
 								$str = $results[$i];
 							    echo "<tr><td>".$results[$i]."</td>";
 							    $i++;
@@ -141,17 +141,17 @@ class View {
 						}				
 						echo "</table>";
                         
-					} elseif ( $results[$i-1] == 'Вторые блюда') {
+					} elseif ( $results[$i-1] == 'Р’С‚РѕСЂС‹Рµ Р±Р»СЋРґР°') {
                         $food = $results[$i-1];
                         echo "<br><span id='category' >".$results[$i-1]."</span><br>";
                         echo "<table border>";
-						echo '<tr><td>№</td><td>Наименование:</td>'
-							.'<td>Кол-во:</td><td>Цена:</td>'
-							.'<td>Кол-во шт.:</td></tr>';
+						echo '<tr><td>в„–</td><td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ:</td>'
+							.'<td>РљРѕР»-РІРѕ:</td><td>Р¦РµРЅР°:</td>'
+							.'<td>РљРѕР»-РІРѕ С€С‚.:</td></tr>';
 											
-							while ( !preg_match('/^(Комплексные)?(обеды)^/i', $results[$i]) ) {
+							while ( !preg_match('/^(РљРѕРјРїР»РµРєСЃРЅС‹Рµ)?(РѕР±РµРґС‹)^/i', $results[$i]) ) {
 							
-								if ( preg_match('/(№)?([0-9]{1,2})$/', $results[$i]) ){    
+								if ( preg_match('/(в„–)?([0-9]{1,2})$/', $results[$i]) ){    
 									$str = $results[$i];
 									echo "<tr><td>".$results[$i]."</td>";
 									$i++;
@@ -175,16 +175,16 @@ class View {
 										
 							echo "</table>";
                         
-					} elseif ( preg_match('/(Комплексные)+\s+(обеды)/i', $results[$i-1])) {
+					} elseif ( preg_match('/(РљРѕРјРїР»РµРєСЃРЅС‹Рµ)+\s+(РѕР±РµРґС‹)/i', $results[$i-1])) {
 						$food = $results[$i-1];
                         echo "<br><span id='category' >".$results[$i-1]."</span><br>";
                         echo "<table border>";
-						echo '<tr><td>№</td><td>Наименование:</td><td>Гарнир:</td>'
-							.'<td>Кол-во:</td><td>Цена:</td>'
-							.'<td>Кол-во шт.:</td></tr>';
+						echo '<tr><td>в„–</td><td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ:</td><td>Р“Р°СЂРЅРёСЂ:</td>'
+							.'<td>РљРѕР»-РІРѕ:</td><td>Р¦РµРЅР°:</td>'
+							.'<td>РљРѕР»-РІРѕ С€С‚.:</td></tr>';
 							
 							while ( !preg_match("/([0-9]{2}).([0-9]{2}).([0-9]{4})./", $results[$i]) ){
-								if ( preg_match('/(№)?([0-9]{1,2})$/', $results[$i]) ){    
+								if ( preg_match('/(в„–)?([0-9]{1,2})$/', $results[$i]) ){    
 									$str = $results[$i];
 									echo "<tr><td>".$results[$i]."</td>";
 									$i++;
@@ -207,11 +207,11 @@ class View {
 									$num++;
 									
 										for ($j=1; $j<3; $j++) {
-											if ( preg_match('/(№)?([0-9]{1,2})$/', $results[$i]) ){    
+											if ( preg_match('/(в„–)?([0-9]{1,2})$/', $results[$i]) ){    
 												$str = $results[$i];
 												echo "<tr><td>".$results[$i]."</td>";
 												$i++;
-												$str .='||'.$n_main.' и '.$results[$i];
+												$str .='||'.$n_main.' Рё '.$results[$i];
 												echo "<td>".$results[$i]."</td>";
 												$i++;
 												$str .='||'.$results[$i];
@@ -236,7 +236,7 @@ class View {
 					}
                 }
 				
-				echo "<br><br><input type='submit' name='order' value='Заказать'>";
+				echo "<br><br><input type='submit' name='order' value='Р—Р°РєР°Р·Р°С‚СЊ'>";
 				echo "</form>";
             } else {    
 				echo $results;

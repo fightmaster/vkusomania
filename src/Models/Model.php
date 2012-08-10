@@ -31,7 +31,7 @@ class Model {
 			$array = file('..\menu.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 				
 			foreach ($array as $line){
-				if ($line=="·" or  strrpos($line, "0@Pa Е")) {
+				if ($line=="В·" or  strrpos($line, "0@PaВ Р•")) {
 					break;
 				} else {
 					rtrim($line);
@@ -41,8 +41,8 @@ class Model {
 			}
 				
 			for ($i=0; $i<count($main)-1; $i++){
-				if ( preg_match('/Пятница/i',$main[$i]) ) {
-					while ( !preg_match('/Понедельник/i',   $main[$i]) ){
+				if ( preg_match('/РџСЏС‚РЅРёС†Р°/i',$main[$i]) ) {
+					while ( !preg_match('/РџРѕРЅРµРґРµР»СЊРЅРёРє/i',   $main[$i]) ){
 						$data[] = $main[$i];
 						unset($main[$i]);
 						$i++;
@@ -75,8 +75,8 @@ class Model {
 			}
 			
 			$this->doubleMass[itog][0] = $itogo;
-			$mailText  = 'ФИО заказчика: '.$this->doubleMass[person][0]."!\n";
-			$mailText .= "Список блюд:\n\n";
+			$mailText  = 'Р¤РРћ Р·Р°РєР°Р·С‡РёРєР°: '.$this->doubleMass[person][0]."!\n";
+			$mailText .= "РЎРїРёСЃРѕРє Р±Р»СЋРґ:\n\n";
 				
 			$num = count($this->doubleMass)-2;
 				
@@ -85,7 +85,7 @@ class Model {
 				
 				for ($j=0;$j<7;$j++){
 					if ($j == 6){
-						$mailText .=$this->doubleMass[$i][$j]." шт. \n";
+						$mailText .=$this->doubleMass[$i][$j]." С€С‚. \n";
 					} else {
 						$mailText .=$this->doubleMass[$i][$j]."\n";
 					}
@@ -95,13 +95,13 @@ class Model {
 				$mailText .= "\n";	
 			}
 			
-			$mailText .= "Итого: ".$this->doubleMass[itog][0]." руб.";
+			$mailText .= "РС‚РѕРіРѕ: ".$this->doubleMass[itog][0]." СЂСѓР±.";
 			$this->mail = $mailText;
 	}	
 	
 	function sendmail($send)
 	{
-			mail ('svyatoslav_maslov@mail.ru','Заказы обедов ВкусоМания',$send);
+			mail ('svyatoslav_maslov@mail.ru','Р—Р°РєР°Р·С‹ РѕР±РµРґРѕРІ Р’РєСѓСЃРѕРњР°РЅРёСЏ',$send);
 	}
 	
 	function getData() 
@@ -109,7 +109,7 @@ class Model {
 			if ($this->data) {
 				return $this->data;
 			} else {
-				return 'Ошибка считывания DOC файла!';
+				return 'РћС€РёР±РєР° СЃС‡РёС‚С‹РІР°РЅРёСЏ DOC С„Р°Р№Р»Р°!';
 			}
 	}
 	
@@ -118,7 +118,7 @@ class Model {
 			if ($this->doubleMass) {
 				return $this->doubleMass;
 			} else {
-				return 'Ошибка! Заказ не сформирован.';
+				return 'РћС€РёР±РєР°! Р—Р°РєР°Р· РЅРµ СЃС„РѕСЂРјРёСЂРѕРІР°РЅ.';
 			}
 	}
 	
@@ -127,7 +127,7 @@ class Model {
 			if ($this->mail) {
 				return $this->mail;
 			} else {
-				return 'Ошибка! Письмо не сгенерированно.';
+				return 'РћС€РёР±РєР°! РџРёСЃСЊРјРѕ РЅРµ СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅРЅРѕ.';
 			}
 	}
 

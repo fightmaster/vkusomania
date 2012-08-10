@@ -2,10 +2,11 @@
  <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <link rel="stylesheet" type="text/css" href="../css/style.css">
-<title>Заказ обедов</title>
-<meta http-equiv="Content-Type" content="text/html;" />
+<title>Р—Р°РєР°Р· РѕР±РµРґРѕРІ</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
+
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
 use Controllers\Controller;
@@ -15,5 +16,8 @@ $control = new Controller();
 $control->processData();
 
 ?>
+
+</body>
+</html>
 
 
