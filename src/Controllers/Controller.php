@@ -3,7 +3,6 @@ namespace Controllers;
 use Models\Model;
 use Views\View;
 
-
 class Controller{
 
 	private $error=false;
@@ -17,14 +16,19 @@ class Controller{
 			$this->userRequest();
 			if ($this->error!="") {
 				View::displayError($this->error); 
-			} elseif ($this->result) { 
-				View::displayResults($this->result);
+				$str = Model::fullMenu();
+				View::displayFormMenu($str);
 			} elseif ( $this->massD && $this->email ) {
 				View::getOrder($this->massD,$this->email);
-			} elseif (!isset($_POST['send']) && !isset($_POST['order']) && !isset($_POST['confirm']) ) {
-				View::displayDefault();
-			} 
-		
+			} elseif (isset($_POST['send'])) {
+				$str = Model::fullMenu();
+				View::displayMenu($str);
+				View::buttonsView();
+				
+			} else {	
+				$str = Model::showDate();
+				View::displayFormMenu($str);
+			}
 	}
 
 	function userRequest() 
@@ -34,11 +38,8 @@ class Controller{
 				if (!$this->error) {
 					$model = new Model();
 					$model->calculate($_POST['filepath']);
-					$result = $model->getData();
-					$this->result = $result;
 				} 
 			}
-				
 			if (isset($_POST['order'])){
 				$bool = $this->checkout();
 				if ( $bool == true ){
@@ -50,7 +51,6 @@ class Controller{
 						$this->email = $message;
 				}				
 			}
-				
 			if (isset ($_POST['confirm'])){
 				$model = new Model();
 				$model->sendMail($_POST['zakaz']);
@@ -77,7 +77,7 @@ class Controller{
 				$this->error = "Вы не выбрали ни одно блюдо из меню!<br>";
 			}
 					
-			if (!preg_match( "/^[А-Яа-я]{3,}+$/", $_POST['FIO'] )){
+			if (!preg_match( "/[А-Яа-я]{3,}+/", $_POST['FIO'] )){
 				$this->error .= "Поле с ФИО заказчика введено не корректно. Повторите попытку!<br>";
 			}
 
@@ -102,3 +102,4 @@ class Controller{
 } // class Controller
 
 ?>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
