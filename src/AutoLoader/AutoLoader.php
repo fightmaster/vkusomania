@@ -1,10 +1,11 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php 
-	
+
 spl_autoload_register(function ($className) {
 
 		$lastNsPos = strripos(__DIR__, '\\');
         $path = substr(__DIR__,0, $lastNsPos);
-		
+
 		$fileName = $path.'\\'.$className . '.php'; 
 		if ( is_readable( $fileName ) ){
 			require $fileName;
@@ -12,5 +13,5 @@ spl_autoload_register(function ($className) {
 			require "..\\".$className .'.php';
 		}
 });
-	
+
 ?>

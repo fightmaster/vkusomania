@@ -1,4 +1,3 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <?php 
 namespace Controllers;
 use Models\Model;
@@ -11,20 +10,25 @@ class Controller{
     private $massD;
 	private $email;
 	 
-	#Р·Р°РїСѓСЃРє РєРѕРЅС‚СЂРѕР»Р»РµСЂР°
+	#запуск контроллера
 	function processData()
 	{
 			$this->userRequest();
 			if ($this->error!="") {
 				View::displayError($this->error); 
-			} elseif ($this->result) { 
-				View::displayResults($this->result);
+				$str = Model::fullMenu();
+				View::displayFormMenu($str);
 			} elseif ( $this->massD && $this->email ) {
 				View::getOrder($this->massD,$this->email);
-			} elseif (!isset($_POST['send']) && !isset($_POST['order']) && !isset($_POST['confirm']) ) {
-				View::displayDefault();
-			} 
-		
+			} elseif (isset($_POST['send'])) {
+				$str = Model::fullMenu();
+				View::displayMenu($str);
+				View::buttonsView();
+				
+			} else {	
+				$str = Model::showDate();
+				View::displayFormMenu($str);
+			}
 	}
 
 	function userRequest() 
@@ -34,11 +38,8 @@ class Controller{
 				if (!$this->error) {
 					$model = new Model();
 					$model->calculate($_POST['filepath']);
-					$result = $model->getData();
-					$this->result = $result;
 				} 
 			}
-				
 			if (isset($_POST['order'])){
 				$bool = $this->checkout();
 				if ( $bool == true ){
@@ -50,7 +51,6 @@ class Controller{
 						$this->email = $message;
 				}				
 			}
-				
 			if (isset ($_POST['confirm'])){
 				$model = new Model();
 				$model->sendMail($_POST['zakaz']);
@@ -68,21 +68,21 @@ class Controller{
 				if ( !empty($_POST[$i]) ){
 					$check = true;
 					if ( !preg_match( "/^[0-9]{1,2}+$/", $_POST[$i] ) ){
-						$this->error .=" ".$_POST[$i]."-РґР°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РЅРµ СЏРІР»СЏРµС‚СЃСЏ РєРѕСЂСЂРµРєС‚РЅС‹Рј. Р’РІРµРґРёС‚Рµ С‡РёСЃР»Рѕ, СЃРѕСЃС‚РѕСЏС‰РµРµ РёР· РѕРґРЅРѕР№ РёР»Рё РґРІСѓС… С†РёС„СЂ!<br>";
+						$this->error .=" ".$_POST[$i]."-данное значение не является корректным. Введите число, состоящее из одной или двух цифр!<br>";
 					}	
 				}	
 			}
 			
 			if ($check == false){
-				$this->error = "Р’С‹ РЅРµ РІС‹Р±СЂР°Р»Рё РЅРё РѕРґРЅРѕ Р±Р»СЋРґРѕ РёР· РјРµРЅСЋ!<br>";
+				$this->error = "Вы не выбрали ни одно блюдо из меню!<br>";
 			}
 					
-			if (!preg_match( "/^[Рђ-РЇР°-СЏ]{3,}+$/", $_POST['FIO'] )){
-				$this->error .= "РџРѕР»Рµ СЃ Р¤РРћ Р·Р°РєР°Р·С‡РёРєР° РІРІРµРґРµРЅРѕ РЅРµ РєРѕСЂСЂРµРєС‚РЅРѕ. РџРѕРІС‚РѕСЂРёС‚Рµ РїРѕРїС‹С‚РєСѓ!<br>";
+			if (!preg_match( "/[А-Яа-я]{3,}+/", $_POST['FIO'] )){
+				$this->error .= "Поле с ФИО заказчика введено не корректно. Повторите попытку!<br>";
 			}
 
 			if (empty($_POST['FIO'])){
-				$this->error .= "Р’С‹ РЅРµ СѓРєР°Р·Р°Р»Рё Р¤РРћ Р·Р°РєР°Р·С‡РёРєР°!<br>";
+				$this->error .= "Вы не указали ФИО заказчика!<br>";
 			}
 				
 			if ( ($check == true) && (!empty($_POST['FIO'])) ){
@@ -91,14 +91,15 @@ class Controller{
 				return false;
 			}
 	}
-		# РїСЂРѕРІРµСЂРєР°
+		# проверка
 	function validate() 
 	{	 
 			if (isset($_POST['send']) && empty($_POST['filepath'])) {
-				$this->error = 'РќРµ РІРІРµРґРµРЅ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ!';
+				$this->error = 'Не введен путь к файлу!';
 			}
 	}
 	 
 } // class Controller
 
 ?>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
