@@ -2,103 +2,130 @@
 namespace Controllers;
 use Models\Model;
 use Views\View;
+use Mappers\DishMapper;
+use Mappers\UserMapper;
 
 class Controller{
 
 	private $error=false;
-	private $result=false;
-    private $massD;
-	private $email;
-	 
-	#������ �����������
+	private $message=false;
+
+	//запуск контроллера
 	function processData()
 	{
-			$this->userRequest();
-			if ($this->error!="") {
-				View::displayError($this->error); 
-				$str = Model::fullMenu();
-				View::displayFormMenu($str);
-			} elseif ( $this->massD && $this->email ) {
-				View::getOrder($this->massD,$this->email);
-			} elseif (isset($_POST['send'])) {
-				$str = Model::fullMenu();
-				View::displayMenu($str);
-				View::buttonsView();
+			if ($_POST['send']){//если админ загружает в базу меню //считывание меню из txt, парсинг, запись в базу
+				if ( $_SESSION['user_name']='admin' ){
+					if ( strrpos( $_POST['filepath'] , 'vkusomania.com/storage/menu.doc'     )   || 
+						 strrpos( $_POST['filepath'] , 'vkusomania.com/storage/menu_new.doc' ) ) {  //если загружается с сайта
+						 
+						$model = new Model;
+						$model->calculate($_POST['filepath']);
+						$array = $model->GetMenuFromTXT();
+						$rez = $model->DataMenu($array);
+						$Mapper = new DishMapper();
+						$res = $Mapper->insertToDB($rez);
+						
+						if ( $res == true ){
+							include "..\src\Views\ViewAdmin.php";
+						} else {
+							include "..\src\Views\ViewAfterLoad.php";
+						}
+						
+					} else {// иначе если пытаются загрузить чтото другое
+						$this->error = "<h1>Вы пытаетесь загрузить файл не с официального сайта!</h1>";
+						include "..\src\Views\ViewAdmin.php";
+						unset($_POST['send']);
+					}
+				}
+			} elseif ($_POST['order']) {//если сделали заказ...вывод окна подтверждения
 				
-			} else {	
-				$str = Model::showDate();
-				View::displayFormMenu($str);
-			}
-	}
-
-	function userRequest() 
-	{
-			if (isset($_POST['send'])){
-				$this->validate();
-				if (!$this->error) {
-					$model = new Model();
-					$model->calculate($_POST['filepath']);
-				} 
-			}
-			if (isset($_POST['order'])){
-				$bool = $this->checkout();
-				if ( $bool == true ){
-						$model = new Model();
-						$model->orderDetail($_POST);
-						$doubleMass = $model->getDoubleMass();
-						$this->massD =$doubleMass;
-						$message    = $model->getMail();
-						$this->email = $message;
-				}				
-			}
-			if (isset ($_POST['confirm'])){
-				$model = new Model();
-				$model->sendMail($_POST['zakaz']);
-				View::Send();
-			}
-	}
-		
-	function checkout()
-	{
-			$it=(count($_POST)-2)/2;
-			$check = false;
-
-			for ($i=1; $i<=$it; $i++){
-			
-				if ( !empty($_POST[$i]) ){
-					$check = true;
-					if ( !preg_match( "/^[0-9]{1,2}+$/", $_POST[$i] ) ){
-						$this->error .=" ".$_POST[$i]."-������ �������� �� �������� ����������. ������� �����, ��������� �� ����� ��� ���� ����!<br>";
-					}	
-				}	
-			}
-			
-			if ($check == false){
-				$this->error = "�� �� ������� �� ���� ����� �� ����!<br>";
-			}
+				$DishMapper = new DishMapper;
+				$Dishes = $DishMapper->ConfirmOrder($_POST);
+				if (!empty($Dishes)){
+					$_SESSION['order'] = $Dishes;
+					include "..\src\Views\ViewOrder.php";
+					$_SESSION['mail'] = $mail;
+				} else {
+					$this->error = '<p>Выберите минимум одно блюдо! Для этого необходимо указать число порций!</p>';
+					$Dishes = $DishMapper->GetMenuFromDB();
+					include "..\src\Views\View.php";
+				}
+				
+			} elseif ($_POST['confirm']) {//если подтвердили заказ...запись в базу, отправка письма на почту
+				
+				$Mapper = new DishMapper;
+				$Dishes = $_SESSION['order'];
+				if (!empty($Dishes)){
+					$Mapper->PutOrderIntoDB($Dishes);
+					$Model = new Model;
+					//$Model->sendmail( $_SESSION['mail'] );
+					//echo $_SESSION['mail'];
+					$this->message = '<p>Спасибо, ваш заказ обработан и отправлен!</p>';
 					
-			if (!preg_match( "/[�-��-�]{3,}+/", $_POST['FIO'] )){
-				$this->error .= "���� � ��� ��������� ������� �� ���������. ��������� �������!<br>";
-			}
-
-			if (empty($_POST['FIO'])){
-				$this->error .= "�� �� ������� ��� ���������!<br>";
-			}
+				} else {
+					$this->error = '<p>Выберите блюдо, чтобы отправить заказ!</p>';
+				}
+				$Dishes = $Mapper->GetMenuFromDB();
+				include "..\src\Views\View.php";
+			
+			} elseif ( isset($_GET['exit']) && $_GET['exit']==1 ){//если пользователь вышел
+			
+				session_destroy();
+				include "..\src\Views\ViewAuto.php";	
 				
-			if ( ($check == true) && (!empty($_POST['FIO'])) ){
-				return true;
-			} else {
-				return false;
+			} elseif ( isset($_GET['query']) && $_GET['query']==1 ){//если пользователь выбрал фильтрацию
+			
+				$Mapper    = new DishMapper();
+				$category  = $Mapper->GetCategoryFromDB();
+				$date      = $Mapper->GetDateFromDB();
+				include "..\src\Views\ViewQuery.php";	
+				
+			}elseif ( isset($_GET['category']) || isset($_GET['date']) || isset($_GET['from']) || isset($_GET['to']) ){//если пользователь выбрал фильтрацию
+			
+				$Mapper    = new DishMapper();
+				$Dishes  = $Mapper->SendQueryToDB($_GET);
+				include "..\src\Views\View.php";	
+				
+			}elseif ( isset($_SESSION['user_name']) ) {// если сессия все еще открыта, то есть пользователь не вышел
+				
+				if ( $_SESSION['user_name']!='admin' ){
+				
+					$Mapper = new DishMapper();
+					$Dishes = $Mapper->GetMenuFromDB();
+					include "..\src\Views\View.php";
+					
+				} else {
+					include "..\src\Views\ViewAdmin.php";
+				}
+				
+			} elseif ($_POST['auto']) {//если пользователь авторизовывается
+				
+				$User = new UserMapper;
+				$result = $User->UserAuto($_POST);
+				$_POST['auto']=false;
+				
+				if ( $_SESSION['user_name'] == 'admin' ){//если авторизовавшийся пользователь - админ
+				
+					include "..\src\Views\ViewAdmin.php";
+					
+				} elseif ($result==true ) {//если обычный пользователь
+				
+					$Mapper = new DishMapper();
+					$Dishes = $Mapper->GetMenuFromDB();
+					include "..\src\Views\View.php";
+					
+				} else {// если такого пользователя не существует
+				
+					$this->error = '<h1>Пользователь не найден!</h1>';
+					include "..\src\Views\ViewAuto.php";
+					
+				}
+			} else {// в иных случаях.....выводится окно авторизации
+			
+				include "..\src\Views\ViewAuto.php";
+				
 			}
 	}
-		# ��������
-	function validate() 
-	{	 
-			if (isset($_POST['send']) && empty($_POST['filepath'])) {
-				$this->error = '�� ������ ���� � �����!';
-			}
-	}
-	 
 } // class Controller
 
 ?>

@@ -5,20 +5,20 @@ $(document).ready(function(){
 		var elem = $(this).closest('.item');
 
 		$.confirm({
-			'title'		: 'Загрузка меню',
-			'message'	: 'Введите логин:<br><input type="text" id="login" size="55" '+
-						  'name="login" value=""><br>'+
-			              '<br>Введите пароль:<br><input type="password" id="pass" size="55" '+
-						  'name="pass" value="">',
-
+			'title'		: 'Р РµРіРёСЃС‚СЂР°С†РёСЏ',
+			'message'	: '<div class="regform">Р’РІРµРґРёС‚Рµ Р¤РРћ:<font color="#FF0000"> *</font><br><input name="FIO" id="FIO" size="30">  <br>'+
+						  'Р›РѕРіРёРЅ:<font color="#FF0000"> *</font><br><INPUT  name="Login" id="Login" size="30"><br>'+
+			              'РџР°СЂРѕР»СЊ:<font color="#FF0000"> *</font><br><INPUT type=password name="Pass" id="Pass" size="30" ><br>'+
+						  '<span lang="en-us">E-Mail:</span><font color="#FF0000"> *</font><br><INPUT name="Email" id="Email" size="30" ><br><br><div id="asyncResult" class="result"> </div></div>',
 			'buttons'	: {
-				'Отправить'	: {
+				'Р РµРіРёСЃС‚СЂР°С†РёСЏ'	: {
 					'class'	: 'blue',
 					'action': function(){
 					showAsyncRequest();
+					Stop();
 					}
 				},
-				'Отмена'	: {
+				'Р’С‹С…РѕРґ'	: {
 					'class'	: 'gray',
 					'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
 				}
@@ -54,22 +54,31 @@ $(document).ready(function(){
 		
 	function showAsyncRequest()
 	{
-		var login = document.getElementById("login").value;
-		var pass = document.getElementById("pass").value;
-		var url = "../src/Check/check.php?login=" + escape(login) + "&pass=" + escape(pass);
-			
+		var FIO   = document.getElementById("FIO").value;
+		var Login = document.getElementById("Login").value;
+		var Pass  = document.getElementById("Pass").value;
+		var Email = document.getElementById("Email").value;
+		var url = "../src/Reg/reg.php?fio=" + FIO + "&login=" + escape(Login)+ "&pass=" + escape(Pass)+ "&email=" + escape(Email);
 		req = getXmlHttpRequest();
 		req.onreadystatechange = showAsyncRequestComplete;
 		req.open("GET", url, true);
 		req.send(null);
+		
+
+		
 	}
 
 	function showAsyncRequestComplete()
 	{
-		// только при состоянии "complete"
+		// С‚РѕР»СЊРєРѕ РїСЂРё СЃРѕСЃС‚РѕСЏРЅРёРё "complete"
 		if (req.readyState == 4) 
 		{
 			document.getElementById("asyncResult").innerHTML = req.responseText;
+			document.getElementById("FIO").value = "";
+			document.getElementById("Login").value = "";
+			document.getElementById("Pass").value = "";
+			document.getElementById("Email").value = "";
+
 		}	
 	}
 	
@@ -77,9 +86,3 @@ $(document).ready(function(){
 	{
 		window.location='index.php'
 	}
-
-
-		
-		// Завершение асинхронного запроса
-
-		
