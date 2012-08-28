@@ -1,105 +1,139 @@
 <?php 
 namespace Controllers;
+
 use Models\Model;
 use Views\View;
+use Mappers\DishMapper;
+use Mappers\UserMapper;
 
 class Controller{
 
 	private $error=false;
-	private $result=false;
-    private $massD;
-	private $email;
-	 
-	#запуск контроллера
+	private $show=false;
+
+	//Р·Р°РїСѓСЃРє РєРѕРЅС‚СЂРѕР»Р»РµСЂР°
 	function processData()
 	{
-			$this->userRequest();
-			if ($this->error!="") {
-				View::displayError($this->error); 
-				$str = Model::fullMenu();
-				View::displayFormMenu($str);
-			} elseif ( $this->massD && $this->email ) {
-				View::getOrder($this->massD,$this->email);
-			} elseif (isset($_POST['send'])) {
-				$str = Model::fullMenu();
-				View::displayMenu($str);
-				View::buttonsView();
-				
-			} else {	
-				$str = Model::showDate();
-				View::displayFormMenu($str);
+			if ( !$this->situationCheck() ) {
+				include "..\src\Views\ViewAuto.php";
 			}
 	}
-
-	function userRequest() 
+	
+	function situationCheck()
 	{
-			if (isset($_POST['send'])){
-				$this->validate();
-				if (!$this->error) {
-					$model = new Model();
-					$model->calculate($_POST['filepath']);
-				} 
-			}
-			if (isset($_POST['order'])){
-				$bool = $this->checkout();
-				if ( $bool == true ){
-						$model = new Model();
-						$model->orderDetail($_POST);
-						$doubleMass = $model->getDoubleMass();
-						$this->massD =$doubleMass;
-						$message    = $model->getMail();
-						$this->email = $message;
-				}				
-			}
-			if (isset ($_POST['confirm'])){
-				$model = new Model();
-				$model->sendMail($_POST['zakaz']);
-				View::Send();
-			}
-	}
-		
-	function checkout()
-	{
-			$it=(count($_POST)-2)/2;
-			$check = false;
-
-			for ($i=1; $i<=$it; $i++){
-			
-				if ( !empty($_POST[$i]) ){
-					$check = true;
-					if ( !preg_match( "/^[0-9]{1,2}+$/", $_POST[$i] ) ){
-						$this->error .=" ".$_POST[$i]."-данное значение не является корректным. Введите число, состоящее из одной или двух цифр!<br>";
-					}	
-				}	
-			}
-			
-			if ($check == false){
-				$this->error = "Вы не выбрали ни одно блюдо из меню!<br>";
-			}
-					
-			if (!preg_match( "/[А-Яа-я]{3,}+/", $_POST['FIO'] )){
-				$this->error .= "Поле с ФИО заказчика введено не корректно. Повторите попытку!<br>";
-			}
-
-			if (empty($_POST['FIO'])){
-				$this->error .= "Вы не указали ФИО заказчика!<br>";
-			}
-				
-			if ( ($check == true) && (!empty($_POST['FIO'])) ){
+			if ( isset($_GET['exit']) && $_GET['exit']==1 ){
+				unset($_SESSION['user_name']);
+				session_destroy();
+				include "..\src\Views\ViewAuto.php";
 				return true;
+			}
+			
+			if ($_POST['send']) {	 
+				$this->PostSend();
+				return true;
+			}
+			
+			if ($_POST['order']) {
+				$this->PostOrder();
+				return true;
+			} 
+			
+			if ($_POST['confirm']) {
+				$this->PostConfirm();
+				return true;
+			} 
+			
+			if ( isset($_SESSION['user_name']) ) {
+				$this->CheckUser();
+				return true;
+			} 
+			
+			if ($_POST['auto']) {
+				$this->PostAuto();
+				return true;
+			} 
+			
+			return false;
+	}
+	
+	function PostSend()
+	{
+			$model = new Model;
+			if ( $model->CheckPath() ) {
+				$model->calculate($_POST['filepath']);
+				$res = $model->DataMenu();
+				$Mapper = new DishMapper();
+				$res = $Mapper->insertToDB($res);		
+				if ( $res == true ) {
+					include "..\src\Views\ViewAdmin.php";
+				} else {
+					include "..\src\Views\ViewAfterLoad.php";
+				}
 			} else {
-				return false;
+				$this->error = "<h1>Р’С‹ РїС‹С‚Р°РµС‚РµСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ С„Р°Р№Р» РЅРµ СЃ РѕС„РёС†РёР°Р»СЊРЅРѕРіРѕ СЃР°Р№С‚Р°!</h1>";
+				include "..\src\Views\ViewAdmin.php";
 			}
 	}
-		# проверка
-	function validate() 
-	{	 
-			if (isset($_POST['send']) && empty($_POST['filepath'])) {
-				$this->error = 'Не введен путь к файлу!';
+	
+	function PostOrder()
+	{
+			$DishMapper = new DishMapper;
+			$Dishes = $DishMapper->ConfirmOrder($_POST);
+			if (!empty($Dishes)){
+				$_SESSION['order'] = $Dishes;
+				$_SESSION['mail'] = $mail;
+				include "..\src\Views\ViewOrder.php";
+			} else {
+				$this->error = '<p>Р’С‹Р±РµСЂРёС‚Рµ РјРёРЅРёРјСѓРј РѕРґРЅРѕ Р±Р»СЋРґРѕ! Р”Р»СЏ СЌС‚РѕРіРѕ РЅРµРѕР±С…РѕРґРёРјРѕ СѓРєР°Р·Р°С‚СЊ С‡РёСЃР»Рѕ РїРѕСЂС†РёР№!</p>';
+				$Dishes = $DishMapper->GetMenuFromDB();
+				include "..\src\Views\View.php";
 			}
 	}
-	 
+	
+	function PostConfirm()
+	{
+			$Mapper = new DishMapper;
+			$Dishes = $_SESSION['order'];
+			if (!empty($Dishes)){
+				$Mapper->PutOrderIntoDB($Dishes);
+				//$Model = new Model;
+				//$Model->sendmail( $_SESSION['mail'] );
+				//echo $_SESSION['mail'];
+				$this->message = '<p>РЎРїР°СЃРёР±Рѕ, РІР°С€ Р·Р°РєР°Р· РѕР±СЂР°Р±РѕС‚Р°РЅ Рё РѕС‚РїСЂР°РІР»РµРЅ!</p>';	
+			} else {
+				$this->error = '<p>Р’С‹Р±РµСЂРёС‚Рµ Р±Р»СЋРґРѕ, С‡С‚РѕР±С‹ РѕС‚РїСЂР°РІРёС‚СЊ Р·Р°РєР°Р·!</p>';
+			}
+			$Dishes = $Mapper->GetMenuFromDB();
+			include "..\src\Views\View.php";
+	}
+	
+	function CheckUser()
+	{
+			if ( $_SESSION['user_name']!='admin' ) {
+				$Mapper = new DishMapper();
+				$Dishes = $Mapper->GetMenuFromDB();
+				include "..\src\Views\View.php";	
+			} else {
+				include "..\src\Views\ViewAdmin.php";
+			}
+	}
+	
+	function PostAuto()
+	{
+			$User = new UserMapper;
+			$result = $User->UserAuto($_POST);
+			if ( $_SESSION['user_name'] == 'admin' ){//РµСЃР»Рё Р°РІС‚РѕСЂРёР·РѕРІР°РІС€РёР№СЃСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ - Р°РґРјРёРЅ
+				include "..\src\Views\ViewAdmin.php";
+			} elseif ($result==true ) {//РµСЃР»Рё РѕР±С‹С‡РЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ
+				$Mapper = new DishMapper();
+				$Dishes = $Mapper->GetMenuFromDB();
+				include "..\src\Views\View.php";
+			} else {// РµСЃР»Рё С‚Р°РєРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚
+				$this->error = '<h1>РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ!</h1>';
+				include "..\src\Views\ViewAuto.php";
+			}
+	}
+	
 } // class Controller
-
 ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

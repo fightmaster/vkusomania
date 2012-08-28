@@ -1,71 +1,77 @@
-<?php
-namespace Views;
-class View {
- 
-	static function displayMenu($str) 
-	{
-            echo $str;
-	}
-	
-	static function buttonsView()
-	{
-            echo "<script> document.getElementById('comment').style.display = 'none'; </script>";
-			echo "<button class='add_comment' onclick=\"refresh()\" >Обновить</button>";
-	}
-	
-	static function displayFormMenu($str) 
-	{
-			if ($str == false){
-				echo "<h2>Данный вариант меню устарел!</h2><br>Попросите администратора обновить меню!";
-			} else {
-				echo "<form method='POST' action='index.php' >\r\n";
-				echo "Введите ФИО:<br>";
-				echo "<input type='text' name='FIO' value=''><br>\r\n";
-				echo $str;
-			}
-	}
-	
-	static function getOrder($doubleMass,$message) 
-	{
-			echo 'Уважаемый '.$doubleMass[person][0].'!<br><br>';
-            echo 'Вы заказали:<br><br>';
-			echo '<table border>';
-			echo '<tr><td>Дата:</td><td>Категория:</td><td>№</td>'
-				.'<td>Наименование:</td><td>Кол-во</td><td>Цена:</td>'
-				.'<td>Кол-во шт.:</td></tr>';
-				
-			for ($i=1;$i<=count($doubleMass)-2;$i++){
-				
-				echo '<tr>';
-				for ($j=0;$j<7;$j++){
-				    echo '<td>'.$doubleMass[$i][$j].'</td>';
-				}
-				echo '</tr>';	
-			}
-			
-			echo '</table>';
-			echo "<br>Итого: ".$doubleMass[itog][0].' руб.';
-			echo "<form method='POST' action='index.php' ><br>";
-			echo "<input type='submit' name='confirm' value='Подтвердить'>";
-			echo "<input type='hidden' name='zakaz' value='$message'>";
-            echo "</form>";
-	}
- 
+<?php  
+$num = count($Dishes)-1;
+$bool = true;
 
-	static function displayError($error) 
-	{
-            echo "<b>Ошибка:</b> {$error}<br>";
-	}
-	
-	static function Send() 
-	{
-            echo "<b>Спасибо!</b><br>";
-			echo "<b>Ваш заказ отправлен.</b><br><br>";
-	}
+if(session_id() != '' && isset($_SESSION['user_name']) ) { ?>
+<script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Р’С‹С…РѕРґ</a>";</script>
 
- 
-	
- 
-} // class VIEW
+<?php 
+} 
 ?>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<h1>Р¤РРћ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ - <?= $_SESSION['user_name'] ?></h1>
+<?php
+if ($this->error!='') {
+	echo '<h2>'.$this->error.'</h2>';
+	$this->error = '';
+}
+if ($this->message!='') {
+	echo '<h3>'.$this->message.'</h3>';
+	$this->message = '';
+}
+
+if ( $Dishes == false ) {
+	echo '<h2>'.'Р’ Р±Р°Р·Рµ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РјРµРЅСЋ, Р°РєС‚СѓР°Р»СЊРЅРѕРµ РЅР° СЃРµРіРѕРґРЅСЏ!'.'</h2>';
+	echo '<h3>'.'РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РѕР±СЂР°С‚РёС‚РµСЃСЊ Рє Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ!'.'</h3>';
+}
+?>
+<form action='index.php' method='post'>
+
+<?php
+for($i=0;$i<$num;$i++) {
+    
+    if ($Dishes[$i]->getDate() != $date){
+        $bool = true;
+    }
+
+    $date = $Dishes[$i]->getDate();
+    $cat  = $Dishes[$i]->getCategory();
+    
+    if ($bool){
+        echo "<h2>".$Dishes[$i]->getDate()."</h2>";
+        $bool = false;
+    }
+    ?>
+    <h3><?=$Dishes[$i]->getCategory()?></h3>
+    
+    <table border>
+    
+    <tr>
+    <td>в„–</td><td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ:</td><td>Р”Р°С‚Р°:</td><td>РљР°С‚РµРіРѕСЂРёСЏ:</td><td>РџРѕСЂС†РёСЏ</td><td>Р¦РµРЅР°:</td><td>РљРѕР»-РІРѕ С€С‚:</td>
+    </tr>
+    
+    <?php
+            while ( ($Dishes[$i]->getDate() == $date) && ($Dishes[$i]->getCategory() == $cat) ) {
+                    ?>
+                    <tr>
+                    <td><?=$i+1?></td><td><?=$Dishes[$i]->getName()?></td><td><?=$date?></td>
+                    <td><?=$cat?></td><td><?=$Dishes[$i]->getPortion()?></td><td><?=$Dishes[$i]->getCost()?></td><td><input name='<?=$Dishes[$i]->getID()?>' size=5></td>
+                    </tr>
+                    <?php
+                    if ($i<$num){
+                        $i++;
+                    }else{
+                        break 2;
+                    }
+            }
+            $i--;
+    
+    ?>
+    
+    </table>
+    
+    <?php
+}
+?>
+</table>
+<input type='submit' name='order' value='Р—Р°РєР°Р·Р°С‚СЊ' class='add_comment' >
+</form>

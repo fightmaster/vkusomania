@@ -10,6 +10,16 @@ body{
 	color:black;
 }
 
+h2 {
+	
+color:red;
+	
+}
+
+h3 {	
+color:green;
+}
+
 #day{
 color:blue;
 font-size:22px;
@@ -63,7 +73,6 @@ width:905px;
 	cursor:pointer;
 	position:absolute;
 	float:center;
-
 }
 
 .item a{
@@ -92,7 +101,6 @@ width:905px;
 }
 .add_comment {
   color: white;
-  
   width: 90px;
   height:25px;
   background:#3e97d1;
@@ -103,10 +111,18 @@ width:905px;
   -webkit-transform: rotate(90deg); 
   -o-transform: rotate(90deg);   
 }
+.regform {
+text-align: center;
+}
 
-
-
-
-
-
+.exit{
+text-align: center;
+}
+.exit a{
+background-color:#dbdbdb;
+padding:3px;
+}
+.exit a:hover{
+color:orange;
+}
 
