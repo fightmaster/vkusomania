@@ -1,69 +1,86 @@
 <?php
+
 namespace Dishes;
-class Dish {
 
-	private $name;
-	private $date;
-	private $category;
-	private $portion;
-	private $cost;
-	private $id;
-	private $num_portion;
+class Dish
+{
 
-	function setName($name){
-			$this->name = $name;
-	}
+    private $name;
+    private $date;
+    private $category;
+    private $portion;
+    private $cost;
+    private $id;
+    private $num_portion;
 
-	function getName(){
-			return $this->name;
-	}
-	
-	function setCategory($cat){
-			$this->category = $cat;
-	}
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
-	function getCategory(){
-			return $this->category;
-	}
-	
-	function setDate($date){
-			$this->date = $date;
-	}
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	function getDate(){
-			return $this->date;
-	}
-	
-	function setPortion($portion){
-			$this->portion = $portion;
-	}
+    public function setCategory($cat)
+    {
+        $this->category = $cat;
+    }
 
-	function getPortion(){
-			return $this->portion;
-	}	
+    public function getCategory()
+    {
+        return $this->category;
+    }
 
-	function setCost($cost){
-			$this->cost = $cost;
-	}
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
 
-	function getCost(){
-			return $this->cost;
-	}
-	
-	function setID($id){
-			$this->id = $id;
-	}
+    public function getDate()
+    {
+        return $this->date;
+    }
 
-	function getID(){
-			return $this->id;
-	}
-	
-	function setNumPortions($num){
-			$this->num_portion = $num;
-	}
+    public function setPortion($portion)
+    {
+        $this->portion = $portion;
+    }
 
-	function getNumPortions(){
-			return $this->num_portion;
-	}
+    public function getPortion()
+    {
+        return $this->portion;
+    }
+
+    public function setCost($cost)
+    {
+        $this->cost = $cost;
+    }
+
+    public function getCost()
+    {
+        return $this->cost;
+    }
+
+    public function setID($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getID()
+    {
+        return $this->id;
+    }
+
+    public function setNumPortions($num)
+    {
+        $this->num_portion = $num;
+    }
+
+    public function getNumPortions()
+    {
+        return $this->num_portion;
+    }
+
 }
-?>
