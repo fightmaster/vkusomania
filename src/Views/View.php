@@ -1,10 +1,32 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'> 
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Заказ еды</title>
+        <link rel="stylesheet" type="text/css" href="../template/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../template/css/jquery.confirm.css" />
+    </head>
+    <body>
+
+        <script src="../vendor/js/jquery.min.js"></script>
+        <script src="../js/jquery.confirm.js"></script>
+        <script src="../js/script.js"></script>
+
+
+        <div class="item">
+            <div class="exit" id="exit"> </div>
+            <div class="exit" id="query"> </div>
+        </div>	
+
+        <div class="main">
+
+
 <?php  
 $num = count($Dishes)-1;
 $bool = true;
 
 if(session_id() != '' && isset($_SESSION['user_name']) ) { ?>
 <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
-<script>document.getElementById("query").innerHTML ="<a class='query' href='index.php?query=1'>Фильтрация</a>";</script>
 
 <?php 
 } 
@@ -28,7 +50,7 @@ if ( $Dishes == false ) {
 <form action='index.php' method='post'>
 
 <?php
-for($i=0;$i<$num;$i++) {
+for ($i = 0; $i < $num; $i++) {
     
     if ($Dishes[$i]->getDate() != $date){
         $bool = true;
@@ -76,3 +98,7 @@ for($i=0;$i<$num;$i++) {
 </table>
 <input type='submit' name='order' value='Заказать' class='add_comment' >
 </form>
+        </div>
+
+    </body>
+</html>
