@@ -1,17 +1,22 @@
 <?php
 
-namespace Models;
+namespace Converter;
 
 use vendor\obninsk\obninsk_doc;
 use Dishes\Dish;
 use Mappers\DishMapper;
+use Dishes\DishCollection;
 
-class Model
+class Converter
 {
 
     private $data;
     private $doubleMass;
-    private $mail;
+	
+	const FILEPATH1 = 'http://vkusomania.com/storage/menu_new.doc';
+	const FILEPATH2 = "http://vkusomania.com/storage/menu.doc";
+	const FILEPATH3 = "http://www.vkusomania.com/storage/menu_new.doc";
+	const FILEPATH4 = "http://www.vkusomania.com/storage/menu.doc";
 
     //создание и форматирование TXT
     public function calculate($filepath)
@@ -62,16 +67,17 @@ class Model
                 $main[] = $line;
             }
         }
-        for ($i = 0; $i < count($main)-1; $i++){
-				if ( preg_match('/Пятница/i',$main[$i]) ) {
-					while ( !preg_match('/Понедельник/i',   $main[$i]) ){
+        for ($i = 0; $i < count($main) - 1; $i++){
+				if ( preg_match('/Пятница/i', $main[$i]) ) {
+					while ( !preg_match('/Понедельник/i', $main[$i]) ){
 						$data[] = $main[$i];
 						unset($main[$i]);
 						$i++;
 					}
 				}
-			}
-		$main = array_merge ($main, $data);
+		}
+			
+	    $main = array_merge($main, $data);
 		
         foreach ($main as $arr) {
             if (preg_match('/(\*Заказы)?(на)?(обеды)?(принимаются)/', $arr)) {
@@ -86,10 +92,10 @@ class Model
 
     public function checkPath()
     {
-        if ($_POST['filepath'] == FILEPATH1 ||
-            $_POST['filepath'] == FILEPATH2 ||
-            $_POST['filepath'] == FILEPATH3 ||
-            $_POST['filepath'] == FILEPATH4) {
+        if ($_POST['filepath'] == Converter::FILEPATH1 ||
+            $_POST['filepath'] == Converter::FILEPATH2 ||
+            $_POST['filepath'] == Converter::FILEPATH3 ||
+            $_POST['filepath'] == Converter::FILEPATH4) {
 
             return true;
         } else {
@@ -105,6 +111,7 @@ class Model
 
         $mapper = new DishMapper();
         $cat_arr = $mapper->getCategoryFromDB();
+        $Dishes = new DishCollection();
         if (is_array($results)) {
             $num = count($results);
             $bcat = false;
@@ -133,54 +140,50 @@ class Model
                     continue;
                 }
                 if ($bkompleks == true) {
+                    $kompleks = trim($results[$i]);
                     $Dish = new Dish;
                     $cat = mb_substr($cat, 0, 17, 'utf-8');
-                    $Dish->setCategory($cat);
-                    $Dish->setDate($date);
-                    $kompleks = trim($results[$i]);
-                    $i++;
-                    $Dish->setName($kompleks . " " . trim($results[$i]));
-                    $i++;
-                    $Dish->setPortion(trim($results[$i]));
-                    $i++;
-                    $Dish->setCost(trim($results[$i]));
-                    $i++;
-                    $Dishes[] = $Dish;
+                    $this->dishFormat($i, $Dish, $cat, $date, $kompleks, $results, true, false);
+                    $Dishes->add($Dish);
                     for ($j = 0; $j < 2; $j++) {
                         $Dish = new Dish;
                         $cat = mb_substr($cat, 0, 17, 'utf-8');
-                        $Dish->setCategory($cat);
-                        $Dish->setDate($date);
-                        $Dish->setName($kompleks . " и " . trim($results[$i]));
-                        $i++;
-                        $Dish->setPortion(trim($results[$i]));
-                        $i++;
-                        $Dish->setCost(trim($results[$i]));
-                        $i++;
-                        $Dishes[] = $Dish;
+                        $this->dishFormat($i, $Dish, $cat, $date, $kompleks, $results, false, true);
+                        $Dishes->add($Dish);
                     }
                     $i--;
                     continue;
                 } else {
                     $Dish = new Dish;
-                    $Dish->setCategory($cat);
-                    $Dish->setDate($date);
-                    $Dish->setName(trim($results[$i]));
-                    $i++;
-                    $Dish->setPortion(trim($results[$i]));
-                    $i++;
-                    $Dish->setCost(trim($results[$i]));
-                    $Dishes[] = $Dish;
+                    $this->dishFormat($i, $Dish, $cat, $date, $kompleks, $results, false, false);
+                    $Dishes->add($Dish);
                 }
             }
         }
         return $Dishes;
     }
-
-    //отправка письма 
-    public function sendmail($send)
+    
+    private function dishFormat(&$i, $Dish, $cat, $date, $kompleks, $results, $komp, $child)
     {
-        mail('svyatoslav_maslov@mail.ru', 'Заказы обедов ВкусоМания', $send);
+        $Dish->setCategory($cat);
+        $Dish->setDate($date);
+        
+        if ($komp == true && $child == false) {
+            $i++;
+            $Dish->setName($kompleks . " " . trim($results[$i])); 
+        } elseif ($komp == false && $child == true) {
+            $Dish->setName($kompleks . " и " . trim($results[$i]));
+        } elseif ($komp == false && $child == false) {
+            $Dish->setName(trim($results[$i]));
+        }
+        $i++;
+        $Dish->setPortion(trim($results[$i]));
+        $i++;
+        $Dish->setCost(trim($results[$i]));
+        
+        if ($komp == true || $child == true) {
+            $i++;
+        }
+        
     }
-
 }

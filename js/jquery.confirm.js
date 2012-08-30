@@ -1,9 +1,10 @@
-(function($){
-	
-    $.confirm = function(params){
+(function($)
+{
+    $.confirm = function(params) {
 		
-        if($('#confirmOverlay').length){
+        if ($('#confirmOverlay').length) {
             // A confirm is already shown on the page:
+			
             return false;
         }
 		
@@ -22,8 +23,8 @@
         var buttons = $('#confirmBox .button'),
         i = 0;
 
-        $.each(params.buttons,function(name,obj){
-            buttons.eq(i++).click(function(){
+        $.each(params.buttons,function(name,obj) {
+            buttons.eq(i++).click(function() {
 				
                 // Calling the action attribute when a
                 // click occurs, and hiding the confirm.
@@ -35,7 +36,7 @@
         });
     }
 
-    $.confirm.hide = function(){
+    $.confirm.hide = function() {
         $('#confirmOverlay').fadeOut(function(){
             $(this).remove();
         });

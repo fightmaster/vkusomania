@@ -1,6 +1,6 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
-    $('.item .delete').click(function(){
+    $('.item .delete').click(function() {
 
         var elem = $(this).closest('.item');
 
@@ -29,25 +29,12 @@ $(document).ready(function(){
 
 function getXmlHttpRequest()
 {
-    if (window.XMLHttpRequest) 
-    {
-        try 
-        {
-            return new XMLHttpRequest();
-        } 
-        catch (e){}
+    if (window.XMLHttpRequest) {
+        return new XMLHttpRequest();  
     } 
-    else if (window.ActiveXObject) 
-    {
-        try 
-        {
-            return new ActiveXObject('Msxml2.XMLHTTP');
-        } catch (e){}
-        try 
-        {
-            return new ActiveXObject('Microsoft.XMLHTTP');
-        } 
-        catch (e){}
+    else if (window.ActiveXObject) {
+        return new ActiveXObject('Msxml2.XMLHTTP');
+        return new ActiveXObject('Microsoft.XMLHTTP');
     }
     return null;
 }
@@ -63,16 +50,12 @@ function showAsyncRequest()
     req.onreadystatechange = showAsyncRequestComplete;
     req.open("GET", url, true);
     req.send(null);
-		
-
-		
 }
 
 function showAsyncRequestComplete()
 {
     // только при состоянии "complete"
-    if (req.readyState == 4) 
-    {
+    if (req.readyState == 4) {
         document.getElementById("asyncResult").innerHTML = req.responseText;
         document.getElementById("FIO").value = "";
         document.getElementById("Login").value = "";

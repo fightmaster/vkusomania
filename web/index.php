@@ -1,24 +1,19 @@
 <?php
 
-use Controllers\Controller;
+use Controller\OrderController;
 use Models\Model;
-use Views\View;
 use Dishes\Dish;
 
-require_once("..\src\AutoLoader\AutoLoader.php");
+require_once("..\src\autoLoader.php");
 error_reporting(E_ALL ^ E_NOTICE);
 
 define("ADMIN", "admin");
-define("FILEPATH1", "http://vkusomania.com/storage/menu_new.doc");
-define("FILEPATH2", "http://vkusomania.com/storage/menu.doc");
-define("FILEPATH3", "http://www.vkusomania.com/storage/menu_new.doc");
-define("FILEPATH4", "http://www.vkusomania.com/storage/menu.doc");
 
 if ((session_id() == '')) {
     session_start();
 }
 
-$control = new Controller();
+$control = new OrderController();
 		
 if (isset($_GET['exit']) && $_GET['exit'] == 1) {
     unset($_SESSION['user_name']);
@@ -45,10 +40,9 @@ if ($_POST['auto']) {
     $control->postAuto();
 }
 		
-if (empty($_POST)) {
-	include "..\src\Views\ViewAuto.php";
+if (empty($_POST) && empty($_SESSION['user_name'])) {
+	include "..\src\\views\\view_auto.php";
 }
-
 ?>
 
 

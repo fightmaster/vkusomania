@@ -20,9 +20,10 @@
 
         <div class="main">
 <?php
-if ($control->error != ''){
-	echo '<h2>'.$control->error.'</h2>';
-	$control->error = '';
+if ($control->getError() != ''){
+	echo '<h2>' . $control->getError() . '</h2>';
+	$err = ' ';
+	$control->setError($err);
 }
 ?>
 <div class="item">

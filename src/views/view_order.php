@@ -33,6 +33,7 @@
 	<?php
 	$i=1;
 	$mail = "Поступил заказ от - $_SESSION[user_name].<br>Состав заказа:<br>";
+    $Dishes = $Dishes->getDishes();
 	foreach ($Dishes as $Dish){
 		
 	?>

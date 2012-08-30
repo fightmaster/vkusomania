@@ -1,32 +1,33 @@
 <?php
 
-namespace Controllers;
+namespace Controller;
 
-use Models\Model;
-use Views\View;
+use Converter\Converter;
 use Mappers\DishMapper;
 use Mappers\UserMapper;
+use Mail\Mail;
 
 /**
  * @author John Doe <john.doe@example.com>
  */
-class Controller
+class OrderController
 {
 
-    public $error;
-    public $show;
-
-    //запуск контроллера
-    public function processData()
-    {
-        if (!$this->situationCheck()) {
-            include "..\src\Views\ViewAuto.php";
-        }
-    }
-
+    private $error;
+   
+    public function getError()
+	{
+		return $this->error;
+	}
+	
+	public function setError($err) 
+        {
+		$this->error = $err;
+	}
+    
     public function postSend()
     {
-        $model = new Model;
+        $model = new Converter();
         if ($model->checkPath()) {
             $model->calculate($_POST['filepath']);
             $res = $model->dataMenu();
@@ -34,72 +35,68 @@ class Controller
             $rez = $Mapper->insertToDB($res);
 			
             if ($rez == true) {
-                include "..\src\Views\ViewAdmin.php";
+                include "..\src\\views\\view_admin.php";
             } else {
-                include "..\src\Views\ViewAfterLoad.php";
+                include "..\src\\views\\view_afterLoad.php";
             }
         } else {
             $this->error = "<h1>Вы пытаетесь загрузить файл не с официального сайта!</h1>";
-            include "..\src\Views\ViewAdmin.php";
+            include "..\src\\views\\view_admin.php";
         }
     }
 
     public function postOrder()
     {
-        $DishMapper = new DishMapper;
+        $DishMapper = new DishMapper();
         $Dishes = $DishMapper->confirmOrder($_POST);
         if (!empty($Dishes)) {
             $_SESSION['order'] = $Dishes;
-            $_SESSION['mail'] = $mail;
-            include "..\src\Views\ViewOrder.php";
+            include "..\src\\views\\view_order.php";
         } else {
             $this->error = '<p>Выберите минимум одно блюдо! Для этого необходимо указать число порций!</p>';
             $Dishes = $DishMapper->GetMenuFromDB();
-            include "..\src\Views\View.php";
+            include "..\src\\views\\view.php";
         }
     }
 
     public function postConfirm()
     {
-        $Mapper = new DishMapper;
+        $Mapper = new DishMapper();
         $Dishes = $_SESSION['order'];
         if (!empty($Dishes)) {
             $Mapper->putOrderIntoDB($Dishes);
-            //$Model = new Model;
-            //$Model->sendmail( $_SESSION['mail'] );
-            //echo $_SESSION['mail'];
             $this->message = '<p>Спасибо, ваш заказ обработан и отправлен!</p>';
         } else {
             $this->error = '<p>Выберите блюдо, чтобы отправить заказ!</p>';
         }
         $Dishes = $Mapper->getMenuFromDB();
-        include "..\src\Views\View.php";
+        include "..\src\\views\\view.php";
     }
 
     public function checkUser()
     {
-        if ($_SESSION['user_name'] != ADMIN) {
+        if ($_SESSION['user_name'] != ADMIN && empty($_POST)) {
             $Mapper = new DishMapper();
             $Dishes = $Mapper->getMenuFromDB();
-            include "..\src\Views\View.php";
-        } else {
-            include "..\src\Views\ViewAdmin.php";
+            include "..\src\\views\\view.php";
+        } elseif ($_SESSION['user_name'] == ADMIN && empty($_POST)) {
+            include "..\src\\views\\view_admin.php";
         }
     }
 
     public function postAuto()
     {
-        $User = new UserMapper;
+        $User = new UserMapper();
         $result = $User->userAuto($_POST);
         if ($_SESSION['user_name'] == ADMIN) {//если авторизовавшийся пользователь - админ
-            include "..\src\Views\ViewAdmin.php";
+            include "..\src\\views\\view_admin.php";
         } elseif ($result == true) {//если обычный пользователь
             $Mapper = new DishMapper();
             $Dishes = $Mapper->getMenuFromDB();
-            include "..\src\Views\View.php";
+            include "..\src\\views\\view.php";
         } else {// если такого пользователя не существует
             $this->error = '<h1>Пользователь не найден!</h1>';
-            include "..\src\Views\ViewAuto.php";
+            include "..\src\\views\\view_auto.php";
         }
     }
 

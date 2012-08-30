@@ -3,20 +3,17 @@
 namespace Mappers;
 
 use Dishes\Dish;
-use Mappers\Connect;
-use Mappers\UserMapper;
+use Dishes\DishCollection;
 
 class DishMapper
 {
     
     public function insertToDB($Dishes)
     {
+        $Dishes = $Dishes->getDishes();
         $link = Connect::getConnection();
-        
-        $date = strstr($Dishes[0]->getDate(), ' ');
-        $date = trim($date);
-        $form = explode('.', $date);
-        $date = $form[2] . '-' . $form[1] . '-' . $form[0];
+
+        $date = $this->formatDate($Dishes[0]->getDate());
 
         $query = "SELECT * FROM menu WHERE date= '$date'";
         $cat = mysql_query($query, $link);
@@ -29,11 +26,8 @@ class DishMapper
 
                 $q = $Dishes[$i]->getCategory();
                 $name = $Dishes[$i]->getName();
-
-                $date = strstr($Dishes[$i]->getDate(), ' ');
-                $date = trim($date);
-                $form = explode('.', $date);
-                $date = $form[2] . '-' . $form[1] . '-' . $form[0];
+                   
+                $date = $this->formatDate($Dishes[$i]->getDate());
 
                 $portion = $Dishes[$i]->getPortion();
                 $cost    = (integer)$Dishes[$i]->getCost();
@@ -99,8 +93,9 @@ class DishMapper
 
         $result = mysql_query($query);
         $myrow = mysql_fetch_array($result);
-
+        
         if (!empty($myrow)) {
+            $Dishes = new DishCollection();
             do {
                 $Dish = new Dish;
                 $Dish->setCategory($myrow['category_name']);
@@ -109,7 +104,7 @@ class DishMapper
                 $Dish->setPortion($myrow['portion']);
                 $Dish->setCost($myrow['cost']);
                 $Dish->setID($myrow['id']);
-                $Dishes[] = $Dish;
+                $Dishes->add($Dish);
             } while ($myrow = mysql_fetch_array($result));
 			
             return $Dishes;
@@ -122,7 +117,8 @@ class DishMapper
     public function confirmOrder($Arr)
     {
         $link = Connect::getConnection();
-
+        $Dishes = new DishCollection();
+        
         foreach ($Arr as $key => $value) {
 
             if (!empty($value) && is_numeric($value)) {
@@ -140,16 +136,16 @@ class DishMapper
                 $Dish->setCost($myrow['cost']);
                 $Dish->setID($myrow['id']);
                 $Dish->setNumPortions($value);
-                $Dishes[] = $Dish;
+                $Dishes->add($Dish);
             }
         }
-		
+        
         return $Dishes;
     }
 
     public function putOrderIntoDB($Dishes)
     {
-
+        $Dishes = $Dishes->getDishes();
         $link = Connect::getConnection();
 
         $iduser = UserMapper::getUserId();
@@ -165,7 +161,8 @@ class DishMapper
         for ($i = 0; $i < $count; $i++) {
 
             $name = $Dishes[$i]->getName();
-            $query = "SELECT id from menu where name='$name'";
+            $date = $Dishes[$i]->getDate();
+            $query = "SELECT id from menu where name='$name' and date='$date'";
             $result = mysql_query($query, $link);
             $myrow = mysql_fetch_assoc($result);
 
@@ -175,8 +172,17 @@ class DishMapper
             $num = $Dishes[$i]->getNumPortions();
 
             $query = "insert into `order_detail` (`id_order`, `id_dish`, `num`) values ( $id_order, $id_dish, $num )";
-            $result = mysql_query($query, $link) or die(mysql_error());
+            $result = mysql_query($query, $link);
         }
     }
-
+    
+    private function formatDate($date)
+    {   
+        $date = strstr($date, ' ');
+        $result = strstr($date, ' ');
+        $result = trim($result);
+        $form = explode('.', $result);
+        $result = $form[2] . '-' . $form[1] . '-' . $form[0];
+        return $result;
+    }
 }

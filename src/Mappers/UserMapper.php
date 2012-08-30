@@ -56,7 +56,7 @@ class UserMapper
         return $message;
     }
 	
-	public static function getUserId()
+	static function getUserId()
 	{
 		$link = Connect::getConnection();
 		
