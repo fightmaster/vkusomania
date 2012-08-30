@@ -42,7 +42,7 @@ class Converter
 
         //фильтрация от лишних символов, пустых строк, значений
         //перестановка пятницы в конец файла
-        $this->data = $this->massive();
+        $this->data = $this->formatTxtFile();
         $f = fopen('../menu.txt', 'w');
         $result = implode("\r\n", $this->data);
         fwrite($f, $result);
@@ -50,7 +50,7 @@ class Converter
     }
 
     //фильтрация лишних символов и перенос пятницы в конец файла
-    public function massive()
+    public function formatTxtFile()
     {
         $array = file('../menu.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($array as $line) {
@@ -141,21 +141,18 @@ class Converter
                 }
                 if ($bkompleks == true) {
                     $kompleks = trim($results[$i]);
-                    $Dish = new Dish;
                     $cat = mb_substr($cat, 0, 17, 'utf-8');
-                    $this->dishFormat($i, $Dish, $cat, $date, $kompleks, $results, true, false);
+                    $Dish = $this->dishFormat($i, $cat, $date, $results, true, false, $kompleks);
                     $Dishes->add($Dish);
                     for ($j = 0; $j < 2; $j++) {
-                        $Dish = new Dish;
                         $cat = mb_substr($cat, 0, 17, 'utf-8');
-                        $this->dishFormat($i, $Dish, $cat, $date, $kompleks, $results, false, true);
+                        $Dish = $this->dishFormat($i, $cat, $date, $results, false, true, $kompleks);
                         $Dishes->add($Dish);
                     }
                     $i--;
                     continue;
                 } else {
-                    $Dish = new Dish;
-                    $this->dishFormat($i, $Dish, $cat, $date, $kompleks, $results, false, false);
+                    $Dish = $this->dishFormat($i, $cat, $date, $results, false, false);
                     $Dishes->add($Dish);
                 }
             }
@@ -163,8 +160,9 @@ class Converter
         return $Dishes;
     }
     
-    private function dishFormat(&$i, $Dish, $cat, $date, $kompleks, $results, $komp, $child)
-    {
+    private function dishFormat(&$i, $cat, $date, $results, $komp, $child, $kompleks = false)
+    {	
+		$Dish = new Dish;
         $Dish->setCategory($cat);
         $Dish->setDate($date);
         
@@ -176,6 +174,7 @@ class Converter
         } elseif ($komp == false && $child == false) {
             $Dish->setName(trim($results[$i]));
         }
+		
         $i++;
         $Dish->setPortion(trim($results[$i]));
         $i++;
@@ -185,5 +184,6 @@ class Converter
             $i++;
         }
         
+		return $Dish;
     }
 }
