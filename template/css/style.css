@@ -1,0 +1,128 @@
+html{
+	background:#dbdbdb;	
+}
+
+body{
+	font:15px Calibri,Arial,sans-serif;
+	border:1px solid transparent;
+	margin:30px;
+	padding:0px;
+	color:black;
+}
+
+h2 {
+	
+color:red;
+	
+}
+
+h3 {	
+color:green;
+}
+
+#day{
+color:blue;
+font-size:22px;
+}
+
+#season{
+color:red;
+font-size:20px;
+}
+
+#category{
+color:orange;
+font-size:18px;
+}
+
+table{
+width:900px;
+}
+
+table,td,tr {
+border: 1px solid #145AA7;
+
+}
+
+table td{
+padding-left: 5px;
+}
+
+#kol{
+text-align: center;
+}
+
+.main{
+border-right:3px solid white;
+width:905px;
+}
+
+.item{
+	background: url("../img/shadow_wide.png") no-repeat center bottom;
+	display: inline-block;
+	position:absolute;
+	left:955px;
+	margin-right:30px;
+	margin-top:10px;
+}
+
+.item .delete{
+	background:url('../img/delete_icon.png')  no-repeat;
+	width:45px;
+	height:45px;
+	cursor:pointer;
+	position:absolute;
+	float:center;
+}
+
+.item a{
+	background-color: #FAFAFA;
+	border: none;
+	display: block;
+	padding: 10px;
+	text-decoration: none;
+}
+
+.item:first-child .delete:before{
+	background:url('../img/tooltip.png') no-repeat;
+	content:'.';
+	text-indent:-9999px;
+	overflow:hidden;
+	height:90px;
+	position:absolute;
+	right:-110px;
+	top:-95px;
+	float:center;
+	font:20px;
+}
+.item a img{
+	display:block;
+	border:none;
+}
+.add_comment {
+  color: white;
+  width: 90px;
+  height:25px;
+  background:#3e97d1;
+  position:fixed;
+  left:915px;
+  top:230px;
+   -moz-transform: rotate(90deg); 
+  -webkit-transform: rotate(90deg); 
+  -o-transform: rotate(90deg);   
+}
+.regform {
+text-align: center;
+}
+
+.exit{
+text-align: center;
+}
+.exit a{
+background-color:#dbdbdb;
+padding:3px;
+}
+.exit a:hover{
+color:orange;
+}
+
