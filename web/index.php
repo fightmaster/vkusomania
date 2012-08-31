@@ -1,23 +1,27 @@
 <?php
 
 use Controller\OrderController;
-use Models\Model;
-use Dishes\Dish;
+
+define("ADMIN", "admin");
 
 require_once("..\src\autoLoader.php");
 error_reporting(E_ALL ^ E_NOTICE);
 
-define("ADMIN", "admin");
+$control = new OrderController();
 
-if ((session_id() == '')) {
-    session_start();
+session_start();
+
+if ($_POST['auto']) {
+    $control->postAuto();
 }
 
-$control = new OrderController();
-		
 if (isset($_GET['exit']) && $_GET['exit'] == 1) {
-    unset($_SESSION['user_name']);
+    
+    session_unset();
     session_destroy();
+    session_regenerate_id(); 
+    setcookie(session_name(), session_id());
+    
 }	
 
 if ($_POST['send']) {
@@ -32,16 +36,12 @@ if ($_POST['confirm']) {
     $control->postConfirm();
 }
 
-if (isset($_SESSION['user_name'])) {
+if (!empty($_SESSION['user_name'])) {
     $control->checkUser();
 }
-
-if ($_POST['auto']) {
-    $control->postAuto();
-}
 		
-if (empty($_POST) && empty($_SESSION['user_name'])) {
-	include "..\src\\views\\view_auto.php";
+if (empty($_POST)) {
+	include_once "..\\src\\layout\\layout.php";
 }
 ?>
 

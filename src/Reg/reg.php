@@ -2,7 +2,7 @@
 
 use Mappers\UserMapper;
 
-require_once("..\AutoLoader\AutoLoader.php");
+require_once("..\autoLoader.php");
 
 $login = trim(strip_tags($_GET['login']));
 $pass = trim(strip_tags($_GET['pass']));
@@ -13,7 +13,7 @@ $email = trim(strip_tags($_GET['email']));
 $user = new UserMapper;
 $result = $user->check($login, $pass, $FIO, $email);
 if ($result == '') {
-    $user->insertUser($login, $pass, $FIO, $email);
+    echo $user->insertUser($login, $pass, $FIO, $email);
 } else {
     echo $result;
 }
