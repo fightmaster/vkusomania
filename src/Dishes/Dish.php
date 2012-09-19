@@ -63,12 +63,12 @@ class Dish
         return $this->cost;
     }
 
-    public function setID($id)
+    public function setId($id)
     {
         $this->id = $id;
     }
 
-    public function getID()
+    public function getId()
     {
         return $this->id;
     }

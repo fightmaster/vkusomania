@@ -1,6 +1,7 @@
 <?php
-if ($control->getError() != ''){
-	echo '<h2>' . $control->getError() . '</h2>';
+$str = $control->getError();
+if ($str != ''){
+	echo '<h2>' . $str . '</h2>';
 	$err = ' ';
 	$control->setError($err);
 }

@@ -12,11 +12,11 @@ class Converter
 
     private $data;
     private $doubleMass;
-	
-	const FILEPATH1 = 'http://vkusomania.com/storage/menu_new.doc';
-	const FILEPATH2 = "http://vkusomania.com/storage/menu.doc";
-	const FILEPATH3 = "http://www.vkusomania.com/storage/menu_new.doc";
-	const FILEPATH4 = "http://www.vkusomania.com/storage/menu.doc";
+
+    const FILEPATH1 = 'http://vkusomania.com/storage/menu_new.doc';
+    const FILEPATH2 = "http://vkusomania.com/storage/menu.doc";
+    const FILEPATH3 = "http://www.vkusomania.com/storage/menu_new.doc";
+    const FILEPATH4 = "http://www.vkusomania.com/storage/menu.doc";
 
     //создание и форматирование TXT
     public function calculate($filepath)
@@ -40,8 +40,6 @@ class Converter
         $this->data = mb_convert_encoding($this->data, "UTF-8", "cp1251");
         fwrite($f, $this->data);
 
-        //фильтрация от лишних символов, пустых строк, значений
-        //перестановка пятницы в конец файла
         $this->data = $this->formatTxtFile();
         $f = fopen('../menu.txt', 'w');
         $result = implode("\r\n", $this->data);
@@ -49,7 +47,6 @@ class Converter
         fclose($f);
     }
 
-    //фильтрация лишних символов и перенос пятницы в конец файла
     public function formatTxtFile()
     {
         $array = file('../menu.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -67,18 +64,18 @@ class Converter
                 $main[] = $line;
             }
         }
-        for ($i = 0; $i < count($main) - 1; $i++){
-				if ( preg_match('/Пятница/i', $main[$i]) ) {
-					while ( !preg_match('/Понедельник/i', $main[$i]) ){
-						$data[] = $main[$i];
-						unset($main[$i]);
-						$i++;
-					}
-				}
-		}
-			
-	    $main = array_merge($main, $data);
-		
+        for ($i = 0; $i < count($main) - 1; $i++) {
+            if (preg_match('/Пятница/i', $main[$i])) {
+                while (!preg_match('/Понедельник/i', $main[$i])) {
+                    $data[] = $main[$i];
+                    unset($main[$i]);
+                    $i++;
+                }
+            }
+        }
+
+        $main = array_merge($main, $data);
+
         foreach ($main as $arr) {
             if (preg_match('/(\*Заказы)?(на)?(обеды)?(принимаются)/', $arr)) {
                 break;
@@ -99,19 +96,18 @@ class Converter
 
             return true;
         } else {
-		
+
             return false;
         }
     }
 
-    //формирование таблиц, внешнего вида меню
     public function dataMenu()
     {
         $results = file('../menu.txt');
 
         $mapper = new DishMapper();
         $cat_arr = $mapper->getCategoryFromDB();
-        $Dishes = new DishCollection();
+        $dishes = new DishCollection();
         if (is_array($results)) {
             $num = count($results);
             $bcat = false;
@@ -142,48 +138,49 @@ class Converter
                 if ($bkompleks == true) {
                     $kompleks = trim($results[$i]);
                     $cat = mb_substr($cat, 0, 17, 'utf-8');
-                    $Dish = $this->dishFormat($i, $cat, $date, $results, true, false, $kompleks);
-                    $Dishes->add($Dish);
+                    $dish = $this->dishFormat($i, $cat, $date, $results, true, false, $kompleks);
+                    $dishes->add($dish);
                     for ($j = 0; $j < 2; $j++) {
                         $cat = mb_substr($cat, 0, 17, 'utf-8');
-                        $Dish = $this->dishFormat($i, $cat, $date, $results, false, true, $kompleks);
-                        $Dishes->add($Dish);
+                        $dish = $this->dishFormat($i, $cat, $date, $results, false, true, $kompleks);
+                        $dishes->add($dish);
                     }
                     $i--;
                     continue;
                 } else {
-                    $Dish = $this->dishFormat($i, $cat, $date, $results, false, false);
-                    $Dishes->add($Dish);
+                    $dish = $this->dishFormat($i, $cat, $date, $results, false, false);
+                    $dishes->add($dish);
                 }
             }
         }
-        return $Dishes;
+        return $dishes;
     }
-    
+
     private function dishFormat(&$i, $cat, $date, $results, $komp, $child, $kompleks = false)
-    {	
-		$Dish = new Dish;
-        $Dish->setCategory($cat);
-        $Dish->setDate($date);
-        
+    {
+        $dish = new Dish;
+        $dish->setCategory($cat);
+        $dish->setDate($date);
+
         if ($komp == true && $child == false) {
             $i++;
-            $Dish->setName($kompleks . " " . trim($results[$i])); 
+            $dish->setName($kompleks . " " . trim($results[$i]));
         } elseif ($komp == false && $child == true) {
-            $Dish->setName($kompleks . " и " . trim($results[$i]));
+            $dish->setName($kompleks . " и " . trim($results[$i]));
         } elseif ($komp == false && $child == false) {
-            $Dish->setName(trim($results[$i]));
+            $dish->setName(trim($results[$i]));
         }
-		
+
         $i++;
-        $Dish->setPortion(trim($results[$i]));
+        $dish->setPortion(trim($results[$i]));
         $i++;
-        $Dish->setCost(trim($results[$i]));
-        
+        $dish->setCost(trim($results[$i]));
+
         if ($komp == true || $child == true) {
             $i++;
         }
-        
-		return $Dish;
+
+        return $dish;
     }
+
 }

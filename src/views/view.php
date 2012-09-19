@@ -1,6 +1,6 @@
-<?php  
-$Dishes = $Dishes->getDishes();
-$num = count($Dishes) - 1;
+<?php
+$dishes = $dishes->getDishes();
+$num = count($dishes) - 1;
 $bool = true;
 
 if(session_id() != '' && isset($_SESSION['user_name']) ) { 
@@ -10,6 +10,11 @@ if(session_id() != '' && isset($_SESSION['user_name']) ) {
 } 
 ?>
 <h1>ФИО пользователя - <?= $_SESSION['user_name']?></h1>
+
+<SCRIPT language=JavaScript>
+ var num=0;
+</SCRIPT>
+
 <?php
 if ($this->error!='') {
 	echo '<h2>'.$this->error.'</h2>';
@@ -20,29 +25,29 @@ if ($this->message!='') {
 	$this->message = '';
 }
 
-if ( $Dishes == false ) {
+if ( $dishes == false ) {
 	echo '<h2>'.'В базе отсутствует меню, актуальное на сегодня!'.'</h2>';
 	echo '<h3>'.'Пожалуйста, обратитесь к администратору!'.'</h3>';
 }
 ?>
-<form action='index.php' method='post'>
+<form name="count" action='index.php' method='post'>
 
 <?php
 for ($i = 0; $i < $num; $i++) {
     
-    if ($Dishes[$i]->getDate() != $date){
+    if ($dishes[$i]->getDate() != $date){
         $bool = true;
     }
 
-    $date = $Dishes[$i]->getDate();
-    $cat  = $Dishes[$i]->getCategory();
+    $date = $dishes[$i]->getDate();
+    $cat  = $dishes[$i]->getCategory();
     
     if ($bool){
-        echo "<h2>".$Dishes[$i]->getDate()."</h2>";
+        echo "<h2>".$dishes[$i]->getDate()."</h2>";
         $bool = false;
     }
     ?>
-    <h3><?=$Dishes[$i]->getCategory()?></h3>
+    <h3><?=$dishes[$i]->getCategory()?></h3>
     
     <table border>
     
@@ -51,11 +56,12 @@ for ($i = 0; $i < $num; $i++) {
     </tr>
     
     <?php
-            while ( ($Dishes[$i]->getDate() == $date) && ($Dishes[$i]->getCategory() == $cat) ) {
+            while ( ($dishes[$i]->getDate() == $date) && ($dishes[$i]->getCategory() == $cat) ) {
                     ?>
                     <tr>
-                    <td><?=$i+1?></td><td><?=$Dishes[$i]->getName()?></td><td><?=$date?></td>
-                    <td><?=$cat?></td><td><?=$Dishes[$i]->getPortion()?></td><td><?=$Dishes[$i]->getCost()?></td><td><input name='<?=$Dishes[$i]->getID()?>' size=5></td>
+                    <td><?=$i+1?></td><td><?=$dishes[$i]->getName()?></td><td><?=$date?></td>
+                    <td><?=$cat?></td><td><?=$dishes[$i]->getPortion()?></td><td><?=$dishes[$i]->getCost().' руб.'?></td>
+                    <td id="inp"><input id="val" name='<?='a'.$dishes[$i]->getId()?>' size=5 value='0''><input id="btn" type="button" value="+" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;this.form.<?='a'.$dishes[$i]->getId()?>.value=(++num);" ><input id="btn" type="button" value="-" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;if(num>0){this.form.<?='a'.$dishes[$i]->getId()?>.value=(--num)};"></td>
                     </tr>
                     <?php
                     if ($i<$num){

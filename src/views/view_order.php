@@ -12,21 +12,21 @@
 	<?php
 	$i=1;
 	$mail = "Поступил заказ от - $_SESSION[user_name].<br>Состав заказа:<br>";
-    $Dishes = $Dishes->getDishes();
-	foreach ($Dishes as $Dish){
+    $dishes = $dishes->getDishes();
+	foreach ($dishes as $dish){
 		
 	?>
 	
     <tr>
-    <td><?=$i?></td><td><?=$Dish->getName()?></td><td><?=$Dish->getCategory()?></td><td><?=$Dish->getDate()?></td>
-	<td><?=$Dish->getPortion()?></td><td><?=$Dish->getCost()?></td><td><?=$Dish->getNumPortions()?></td>
+    <td><?=$i?></td><td><?=$dish->getName()?></td><td><?=$dish->getCategory()?></td><td><?=$dish->getDate()?></td>
+	<td><?=$dish->getPortion()?></td><td><?=$dish->getCost()?></td><td><?=$dish->getNumPortions()?></td>
     </tr>
 	
 	<?php
-	$mail .=$Dish->getName()."<br>".$Dish->getCategory()."<br>".$Dish->getDate()."<br>".
-			$Dish->getPortion()."<br>".$Dish->getCost()."<br>".$Dish->getNumPortions()."<br>";
+	$mail .=$dish->getName()."<br>".$dish->getCategory()."<br>".$dish->getDate()."<br>".
+			$dish->getPortion()."<br>".$dish->getCost()."<br>".$dish->getNumPortions()."<br>";
 	$i++;
-	$itog +=  $Dish->getNumPortions() * $Dish->getCost();
+	$itog +=  $dish->getNumPortions() * $dish->getCost();
 	}
 	$mail .="<br>Заказ на сумму - $itog";
 	?>

@@ -27,45 +27,28 @@ $(document).ready(function() {
     });
 });
 
-function getXmlHttpRequest()
-{
-    if (window.XMLHttpRequest) {
-        return new XMLHttpRequest();  
-    } 
-    else if (window.ActiveXObject) {
-        return new ActiveXObject('Msxml2.XMLHTTP');
-        return new ActiveXObject('Microsoft.XMLHTTP');
-    }
-    return null;
-}
-		
-function showAsyncRequest()
-{
+function showAsyncRequest() {
+    
     var FIO   = document.getElementById("FIO").value;
     var Login = document.getElementById("Login").value;
     var Pass  = document.getElementById("Pass").value;
     var Email = document.getElementById("Email").value;
-    var url = "../src/Reg/reg.php?fio=" + FIO + "&login=" + escape(Login)+ "&pass=" + escape(Pass)+ "&email=" + escape(Email);
-    req = getXmlHttpRequest();
-    req.onreadystatechange = showAsyncRequestComplete;
-    req.open("GET", url, true);
-    req.send(null);
-}
-
-function showAsyncRequestComplete()
-{
-    // только при состоянии "complete"
-    if (req.readyState == 4) {
-        document.getElementById("asyncResult").innerHTML = req.responseText;
+    
+    $.post("index.php", {
+        name: FIO, 
+        login: Login, 
+        password: Pass, 
+        email: Email
+    },
+    function(data) {
+        document.getElementById("asyncResult").innerHTML = data;
         document.getElementById("FIO").value = "";
         document.getElementById("Login").value = "";
         document.getElementById("Pass").value = "";
         document.getElementById("Email").value = "";
-
-    }	
+    });
 }
 	
-function refresh()
-{
-    window.location='index.php'
+function refresh() {
+    window.location='index.php';
 }
