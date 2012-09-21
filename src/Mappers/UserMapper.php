@@ -26,7 +26,7 @@ class UserMapper
 
     public function check($login, $pass, $FIO, $email)
     {
-        $message[] = array();
+        $message = array();
 
         if ($login == '') {
             $message[] = "Вы не заполнили поле Логин!";
@@ -51,15 +51,9 @@ class UserMapper
         } elseif (!preg_match("/^[a-zA-Z0-9_.]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$/", $email)) {
             $message[] = "E-mail введен не корректно!";
         }
+        
+        return $message;
 
-        try {
-            if (!empty($message)) {
-                throw new \Exception("Неправильно заполненна форма!");
-            }
-        } catch (\Exception $e) {
-            $e->getMessage();
-            return $message;
-        }
     }
 
     static function getUserId()

@@ -1,3 +1,9 @@
+<div class="item">
+<div class="exit" id="exit"> </div>
+<div class="exit" id="query"> </div>
+</div>	
+
+        <div class="main">
 <?php
 
 if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
@@ -140,3 +146,4 @@ if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
     }
 }
 ?>
+</div>

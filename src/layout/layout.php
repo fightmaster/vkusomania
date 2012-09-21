@@ -13,17 +13,13 @@
         <script src="../vendor/js/jquery.min.js"></script>
         <script src="../js/jquery.confirm.js"></script>
         <script src="../js/script.js"></script>
-
-
-        <div class="item">
-            <div class="exit" id="exit"> </div>
-            <div class="exit" id="query"> </div>
-        </div>	
-
-        <div class="main">
-         
+ 
          <?php
-
+            
+            if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['name']) && isset($_POST['email'])) {
+            include_once "..\src\\views\\view_err.php";
+            }
+            
             if ( ($_POST['send'] && $_SESSION['user_name'] != '' && $_SESSION['user_name'] == ADMIN) || ($_SESSION['user_name'] == ADMIN) ) {
             include_once "..\src\\views\\view_admin.php";
             }
@@ -40,13 +36,11 @@
             include_once "..\src\\views\\view.php";
             }
 
-            if ($_SESSION['user_name'] == '') {
+            if ($_SESSION['user_name'] == '' && !isset($_POST['login']) && !isset($_POST['password']) && !isset($_POST['name']) && !isset($_POST['email'])) {
             include_once "..\src\\views\\view_auto.php";
             }
-         
-         ?>   
             
-        </div>
+         ?>   
 
     </body>
 </html>

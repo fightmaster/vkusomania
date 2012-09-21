@@ -1,3 +1,9 @@
+<div class="item">
+<div class="exit" id="exit"> </div>
+<div class="exit" id="query"> </div>
+</div>	
+
+<div class="main">
 <?php
 $str = $control->getError();
 if ($str != ''){
@@ -27,4 +33,6 @@ if ($str != ''){
 <INPUT type='submit' name='auto' size="20"> 
 
 </form>
+</div>
+
 </div>

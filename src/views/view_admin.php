@@ -1,3 +1,9 @@
+<div class="item">
+<div class="exit" id="exit"> </div>
+<div class="exit" id="query"> </div>
+</div>	
+
+        <div class="main">
 <?php
 if ( ($_POST['send']) && $rez == false && $model->checkPath() ) {
     ?>
@@ -29,3 +35,4 @@ if ( ($_POST['send']) && $rez == false && $model->checkPath() ) {
     }
 }
 ?>
+</div>

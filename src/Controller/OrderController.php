@@ -87,14 +87,15 @@ class OrderController {
         $FIO = trim(strip_tags($_POST['name']));
         $email = trim(strip_tags($_POST['email']));
 
-
         $user = new UserMapper;
         $result = $user->check($login, $pass, $FIO, $email);
-        if ($result == '') {
-            echo $user->insertUser($login, $pass, $FIO, $email);
-        } else {
-            echo $result;
-        }
+        
+        if ( empty ($result) ) {
+            $str = $user->insertUser($login, $pass, $FIO, $email);
+        } 
+        
+        include_once '..\\src\\layout\\layout.php';
+        
     }
 
 }

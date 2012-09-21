@@ -42,12 +42,13 @@ if ($_POST['confirm'] && $_SESSION['user_name'] != '') {
 if (!empty($_SESSION['user_name'])) {
     $control->checkUser();
 }
-	
-if ($_SESSION['user_name'] == '') {
-	include_once "..\\src\\layout\\layout.php";
-}
 
 if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['name']) && isset($_POST['email'])) {
     $control->insertUser();
 }
+
+if ($_SESSION['user_name'] == '' && !isset($_POST['login']) && !isset($_POST['password']) && !isset($_POST['name']) && !isset($_POST['email'])) {
+	include_once "..\\src\\layout\\layout.php";
+}
+
 ?>
