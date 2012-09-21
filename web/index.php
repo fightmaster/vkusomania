@@ -43,7 +43,7 @@ if (!empty($_SESSION['user_name'])) {
     $control->checkUser();
 }
 	
-if ($_SESSION['user_name'] == '' && !isset($_POST['login']) && !isset($_POST['password']) && !isset($_POST['name']) && !isset($_POST['email'])) {
+if ($_SESSION['user_name'] == '') {
 	include_once "..\\src\\layout\\layout.php";
 }
 

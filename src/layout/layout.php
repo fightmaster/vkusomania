@@ -23,57 +23,26 @@
         <div class="main">
          
          <?php
-           if ($_POST['send'] && $_SESSION['user_name'] != '') {
-                if ($this->error != "") {
-                    include_once "..\src\\views\\view_admin.php";
-                } else {
-                    if ($rez != true) {
-                        include_once "..\src\\views\\view_afterLoad.php";  
-                    } else {
-                        include_once "..\src\\views\\view_admin.php";
-                    } 
-                }
-           }
 
-           if ($_POST['order'] && $_SESSION['user_name'] != '') {
-                if (!empty($dishes) && $this->error == "") {
-                    include_once "..\src\\views\\view_order.php";
-                } elseif ($control->getError() != "") {
-                    include_once "..\src\\views\\view.php";
-                }
-           }
+            if ( ($_POST['send'] && $_SESSION['user_name'] != '' && $_SESSION['user_name'] == ADMIN) || ($_SESSION['user_name'] == ADMIN) ) {
+            include_once "..\src\\views\\view_admin.php";
+            }
 
-           if ($_POST['confirm'] && $_SESSION['user_name'] != '') {
-               include_once "..\src\\views\\view.php";
-           }
+            if ( ($_POST['order'] && $_SESSION['user_name'] != '') || ($_SESSION['user_name'] != ADMIN && empty($_POST)) ) {
+            include_once "..\src\\views\\view.php";
+            }
 
-           if (isset($_SESSION['user_name']) && $_SESSION['user_name'] != '') {
-                if ($_SESSION['user_name'] != ADMIN && empty($_POST)) {
-                    include_once "..\src\\views\\view.php";
+            if ($_POST['confirm'] && $_SESSION['user_name'] != '') {
+            include_once "..\src\\views\\view.php";
+            }
 
-                } elseif ($_SESSION['user_name'] == ADMIN && empty($_POST)) {
-                    include_once "..\src\\views\\view_admin.php";
-                }
-           }
+            if ($_POST['auto'] && $_SESSION['user_name'] != '') {
+            include_once "..\src\\views\\view.php";
+            }
 
-           if ($_POST['auto'] && $_SESSION['user_name'] != '') {
-                if ($_SESSION['user_name'] == ADMIN && !empty($_POST)) {
-                    include_once "..\src\\views\\view_admin.php";
-                } elseif ($result == true) {
-                    if ($dishes != false) {
-                        include_once "..\src\\views\\view.php";
-                    } else {
-                        include_once "..\src\\views\\view_no_menu.php";
-                    }
-                } elseif ($result) {
-                    include_once "..\src\\views\\view_auto.php";
-                }
-           }
-
-           
-           if ($_SESSION['user_name'] == '') {
-               include_once "..\src\\views\\view_auto.php";
-           }
+            if ($_SESSION['user_name'] == '') {
+            include_once "..\src\\views\\view_auto.php";
+            }
          
          ?>   
             

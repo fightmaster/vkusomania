@@ -32,7 +32,6 @@ class Converter
         }
         fclose($file_handle);
 
-
         //преобразование данных и запись в TXT
         $obrabotka = new obninsk_doc;
         $this->data = $obrabotka->doc($s, 0, 1);
@@ -51,7 +50,7 @@ class Converter
     {
         $array = file('../menu.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($array as $line) {
-            if (strrpos($line, "0@Pa Е") || preg_match('/(·)/', $line) ||
+            if (strrpos($line, "0@Pa Е") || preg_match('/(·)/', $line) || preg_match('/()/', $line) ||
                     preg_match('/(летнее)?(меню)/i', $line) ||
                     preg_match('/(осеннее)?(меню)/i', $line) ||
                     preg_match('/(зимнее)?(меню)/i', $line) ||

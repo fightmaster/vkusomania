@@ -21,8 +21,19 @@ class OrderController {
         $this->error = $err;
     }
 
+    public function actionAuto() {
+        $user = new UserMapper();
+        $result = $user->userAuto($_POST);
+        if ($result == true && $_SESSION['user_name'] != ADMIN) {//если обычный пользователь
+            $mapper = new DishMapper();
+            $dishes = $mapper->getMenuFromDB();
+        } elseif ($result == false && $_SESSION['user_name'] != ADMIN) {// если такого пользователя не существует
+            $this->error = '<h1>Пользователь не найден!</h1>';
+        }
+        include_once '..\\src\\layout\\layout.php';
+    }
+    
     public function actionSend() {
-        $rez = '';
         $model = new Converter();
         if ($model->checkPath()) {
             $model->calculate($_POST['filepath']);
@@ -65,18 +76,6 @@ class OrderController {
         if ($_SESSION['user_name'] != ADMIN && empty($_POST)) {
             $mapper = new DishMapper();
             $dishes = $mapper->getMenuFromDB();
-        }
-        include_once '..\\src\\layout\\layout.php';
-    }
-
-    public function actionAuto() {
-        $user = new UserMapper();
-        $result = $user->userAuto($_POST);
-        if ($result == true && $_SESSION['user_name'] != ADMIN) {//если обычный пользователь
-            $mapper = new DishMapper();
-            $dishes = $mapper->getMenuFromDB();
-        } elseif ($result == false && $_SESSION['user_name'] != ADMIN) {// если такого пользователя не существует
-            $this->error = '<h1>Пользователь не найден!</h1>';
         }
         include_once '..\\src\\layout\\layout.php';
     }
