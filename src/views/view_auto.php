@@ -1,15 +1,14 @@
-<div class="item">
-<div class="exit" id="exit"> </div>
-<div class="exit" id="query"> </div>
-</div>	
+<?php
+use Controller\OrderController;
+?>
 
 <div class="main">
 <?php
-$str = $control->getError();
+$str = OrderController::getError();
 if ($str != ''){
 	echo '<h2>' . $str . '</h2>';
-	$err = ' ';
-	$control->setError($err);
+	$err = '';
+	OrderController::setError($err);
 }
 ?>
 <div class="item">

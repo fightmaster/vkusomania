@@ -1,18 +1,39 @@
 <div class="item">
-<div class="exit" id="exit"> </div>
-<div class="exit" id="query"> </div>
+<div class="menu" id="main"> </div>      
+<div class="menu" id="user_roles"> </div>
+<div class="menu" id="edit_roles"> </div>
+<div class="menu" id="reports"> </div>
+<div class="menu" id="exit"> </div>
+<div class="menu" id="query"> </div>
 </div>	
 
-        <div class="main">
+<div class="main">
 <?php
 if ( ($_POST['send']) && $rez == false && $model->checkPath() ) {
     ?>
     <h2>Меню успешно загружено в базу данных!</h2>
-    <p>Для заказа обеда вам необходимо вернуться на главную страницу, зарегестрироваться или авторизоваться!</p>
-    <a href='index.php'>Вернуться...</a>
     <?php
 } else {
     ?>
+    <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
+    <?php
+    if ($Arr['user_roles'] == 1) {
+    ?>
+        <script>document.getElementById("user_roles").innerHTML ="<a class='exit' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
+    <?php
+    }
+    if ($Arr['edit_roles'] == 1) {
+    ?>
+        <script>document.getElementById("edit_roles").innerHTML ="<a class='exit' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
+    <?php
+    }
+    if ($Arr['reports'] == 1) {
+    ?>
+        <script>document.getElementById("reports").innerHTML ="<a class='exit' href='index.php?reports=1'>Отчетность</a>";</script>
+    <?php
+    }
+    ?>
+        
     <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
     <form method='POST' action='index.php' >
     <h2>Добро пожаловать в админку!</h2>
@@ -24,9 +45,9 @@ if ( ($_POST['send']) && $rez == false && $model->checkPath() ) {
     <input type='submit' name='send' value='Загрузить'>
     </form>
     <?php 
-    if ($this->error!=''){
-        echo '<h2>'.$this->error.'</h2>';
-        $this->error = '';
+    if (self::$error!=''){
+        echo '<h2>'.self::$error.'</h2>';
+        self::$error = '';
     }
     if ($res == true && $_POST['send']) {
         ?>

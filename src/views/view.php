@@ -1,15 +1,41 @@
+<?php
+use Controller\OrderController;
+use Dishes\DishCollection;
+?>
 <div class="item">
-<div class="exit" id="exit"> </div>
-<div class="exit" id="query"> </div>
+<div class="menu" id="main"> </div>
+<div class="menu" id="user_roles"> </div>
+<div class="menu" id="edit_roles"> </div>
+<div class="menu" id="reports"> </div>
+<div class="menu" id="exit"> </div>
 </div>	
 
-        <div class="main">
+<div class="main">
+    
 <?php
 
-if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
-?>   
+    if (!empty($dishes) && self::$error == "" && $_POST['order'] && !empty($arr) ) {
+    ?> 
+    <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
+       <?php
+    if ($Arr['user_roles'] == 1) {
+    ?>
+        <script>document.getElementById("user_roles").innerHTML ="<a class='exit' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
+    <?php
+    }
+    if ($Arr['edit_roles'] == 1) {
+    ?>
+        <script>document.getElementById("edit_roles").innerHTML ="<a class='exit' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
+    <?php
+    }
+    if ($Arr['reports'] == 1) {
+    ?>
+        <script>document.getElementById("reports").innerHTML ="<a class='exit' href='index.php?reports=1'>Отчетность</a>";</script>
+    <?php 
+    } 
+    ?>
+        
     <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
-    <h1>ФИО пользователя - <?= $_SESSION['user_name'] ?></h1>
     <form action='index.php' method='post'>
     <h3>Вы заказали:</h3>
 
@@ -48,7 +74,6 @@ if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
     
 <?php    
 } else {
-
     if ( ($dishes != false) || ($_POST['confirm']) ) {
 
         $dishes = $dishes->getDishes();
@@ -56,21 +81,40 @@ if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
         $bool = true;
 
         if(session_id() != '' && isset($_SESSION['user_name']) ) { 
-        ?>
-        <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
+            ?>
+            <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
+            <?php
+            if ($Arr['user_roles'] == 1) {
+            ?>
+                <script>document.getElementById("user_roles").innerHTML ="<a class='exit' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
+            <?php
+            }
+            if ($Arr['edit_roles'] == 1) {
+            ?>
+                <script>document.getElementById("edit_roles").innerHTML ="<a class='exit' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
+            <?php
+            }
+            if ($Arr['reports'] == 1) {
+            ?>
+                <script>document.getElementById("reports").innerHTML ="<a class='exit' href='index.php?reports=1'>Отчетность</a>";</script>
+            <?php 
+            } 
+            ?>
+
+            <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
         <?php 
         } 
         ?>
-        <h1>ФИО пользователя - <?= $_SESSION['user_name']?></h1>
+
 
         <SCRIPT language=JavaScript>
          var num=0;
         </SCRIPT>
 
         <?php
-        if ($this->error!='') {
-                echo '<h2>'.$this->error.'</h2>';
-                $this->error = '';
+        if (self::$error!='') {
+                echo '<h2>'.self::$error.'</h2>';
+                self::$error = '';
         }
         if ($this->message!='') {
                 echo '<h3>'.$this->message.'</h3>';
@@ -81,6 +125,7 @@ if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
                 echo '<h2>'.'В базе отсутствует меню, актуальное на сегодня!'.'</h2>';
                 echo '<h3>'.'Пожалуйста, обратитесь к администратору!'.'</h3>';
         }
+        
         ?>
         <form name="count" action='index.php' method='post'>
 
@@ -113,7 +158,7 @@ if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
                             <tr>
                             <td><?=$i+1?></td><td><?=$dishes[$i]->getName()?></td><td><?=$date?></td>
                             <td><?=$cat?></td><td><?=$dishes[$i]->getPortion()?></td><td><?=$dishes[$i]->getCost().' руб.'?></td>
-                            <td id="inp"><input id="val" name='<?='a'.$dishes[$i]->getId()?>' size=5 value='0''><input id="btn" type="button" value="+" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;this.form.<?='a'.$dishes[$i]->getId()?>.value=(++num);" ><input id="btn" type="button" value="-" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;if(num>0){this.form.<?='a'.$dishes[$i]->getId()?>.value=(--num)};"></td>
+                            <td id="inp"><input id="val" name='<?='a'.$dishes[$i]->getId()?>' size=2 value='0''><input id="btn" type="button" value="+" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;this.form.<?='a'.$dishes[$i]->getId()?>.value=(++num);" ><input id="btn" type="button" value="-" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;if(num>0){this.form.<?='a'.$dishes[$i]->getId()?>.value=(--num)};"></td>
                             </tr>
                             <?php
                             if ($i<$num){
@@ -125,25 +170,46 @@ if (!empty($dishes) && $this->error == "" && $_POST['order'] ) {
                     $i--;
 
             ?>
-
+                            
             </table>
 
             <?php
         }
+
         ?>
         </table>
         <input type='submit' name='order' value='Заказать' class='add_comment' >
         </form>   
-        <?
+        <?php
 
     } else {
     ?>    
         <h2>К сожалению меню не может быть сформированно!</h2>
         <p>В базе данных отсутсвуют актуальные данные на сегодня.</p>
         <p>Пожалуйста обратитесь к администратору!</p>
+        
+        <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
+        <?php
+        if ($Arr['user_roles'] == 1) {
+        ?>
+            <script>document.getElementById("user_roles").innerHTML ="<a class='exit' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
+        <?php
+        }
+        if ($Arr['edit_roles'] == 1) {
+        ?>
+            <script>document.getElementById("edit_roles").innerHTML ="<a class='exit' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
+        <?php
+        }
+        if ($Arr['reports'] == 1) {
+        ?>
+            <script>document.getElementById("reports").innerHTML ="<a class='exit' href='index.php?reports=1'>Отчетность</a>";</script>
+        <?php 
+        } 
+        ?>
+
         <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
     <?php    
     }
-}
+} 
 ?>
 </div>

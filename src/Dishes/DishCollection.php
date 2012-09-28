@@ -21,4 +21,9 @@ class DishCollection
     {
         return $this->collection;
     }
+    
+    public function getCollectionCount()
+    {
+        return count($this->collection);
+    }
 }
