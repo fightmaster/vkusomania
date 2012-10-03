@@ -4,7 +4,6 @@
 <div class="menu" id="edit_roles"> </div>
 <div class="menu" id="reports"> </div>
 <div class="menu" id="exit"> </div>
-<div class="menu" id="query"> </div>
 </div>
 
 <div class="main">
@@ -17,16 +16,16 @@ if ($Arr['user_roles'] == 1) {
 }
 if ($Arr['edit_roles'] == 1) {
 ?>
-    <script>document.getElementById("edit_roles").innerHTML ="<a class='edit_roles' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
+    <script>document.getElementById("edit_roles").innerHTML ="<a class='edit_user' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
 <?php
 }
 if ($Arr['reports'] == 1) {
 ?>
-    <script>document.getElementById("reports").innerHTML ="<a class='reports' href='index.php?reports=1'>Отчетность</a>";</script>
+    <script>document.getElementById("reports").innerHTML ="<a class='edit_user' href='index.php?reports=1'>Отчетность</a>";</script>
 <?php 
 } 
 ?>
-<script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
+<script>document.getElementById("exit").innerHTML ="<a class='edit_user' href='index.php?exit=1'>Выход</a>";</script>
     
 <?php
 
@@ -34,7 +33,7 @@ if ($Arr['user_roles'] == 1 && $_GET['user_roles'] == 1) {
     echo "<h2>Редактор пользователей</h2>"; 
     
     ?>
-    
+
     <form action="index.php?user_roles=1" method="POST">
     <table border>
     <tr>
@@ -47,18 +46,18 @@ if ($Arr['user_roles'] == 1 && $_GET['user_roles'] == 1) {
                 <td><?=$user->getLogin()?></td>
                 <td><?=$user->getFIO()?></td>
                 <td><?=$user->getEmail()?></td> 
-                <td><select size="1" name="role">
+                <td><select size="1" name="role<?=$user->getId()?>">
                     <?php foreach ($roles as $role) {if ( $role[role_name] == $user->getRole() ) {echo "<option selected value=".$user->getId()."|".$role[id].">$role[role_name]</option>";} 
                                                      else { echo "<option value=".$user->getId()."|".$role[id].">$role[role_name]</option>";} } ?>
                     </select></td>
-                <td><input type='submit' name='input_role' value="Переназначить роль"></td>
+                <td><input type='submit' name="input_role" value="Переназначить роль"></td>
            </tr>
             <?php
     }
 
     ?>
     </table>
-    </form>   
+    </form>    
     
     <?php
     
@@ -155,6 +154,7 @@ if ($Arr['edit_roles'] == 1 && $_GET['edit_roles'] == 1) {
         <?php
         
     }
+    
     
 }
 

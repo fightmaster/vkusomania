@@ -6,6 +6,7 @@ use Converter\Converter;
 use Mappers\DishMapper;
 use Mappers\UserMapper;
 use Mappers\RoleMapper;
+use ACL\ACL;
 
 use Users\User;
 
@@ -24,58 +25,67 @@ class OrderController
     public static function setError($err) {
         self::$error = $err;
     }
-
-    public function actionRole() {
-
-        include_once '..\\src\\layout\\layout.php';
-    }
     
     public function actionAuto() {
         
         $user = new UserMapper();
+        if ($_POST['Login'] != '' && $_POST['Pass'] != '') {
         $result = $user->userAuto($_POST);
-
-        if ( isset($_SESSION['user']) ) {
-        $Arr = $_SESSION['roles'];
         }
+        
+        if ( isset($_SESSION['user']) ) {
+        $ACL = new ACL();
+        $User = new User();
+        $User = $_SESSION['user'];
+        $Arr = $ACL->getUserPermissions($User->getLogin());
+        }
+        
         if ($result == true && $Arr['orders'] == 1) {//если обычный пользователь
             $mapper = new DishMapper();
             $dishes = $mapper->getMenuFromDB();
-        } elseif ($result == false && $Arr['orders'] == 1) {// если такого пользователя не существует
-            self::$error = '<h1>Пользователь не найден!</h1>';
-        }
-        include_once '..\\src\\layout\\layout.php';
+        } 
+
+        if ( isset($_SESSION['user']) ) {
+            $Arr = $_SESSION['roles'];
+        } 
+        
+        include_once "../src/views/view_main.php";
     }
     
     public function actionSend() {
         
-        $User = new User();
         if ( isset($_SESSION['user']) ) {
+        $ACL = new ACL();
+        $User = new User();
         $User = $_SESSION['user'];
-        $Arr = $User->getPermissions();
+        $Arr = $ACL->getUserPermissions($User->getLogin());
         }
         
         $mapper = new DishMapper();
         
         $model = new Converter();
         if ($model->checkPath()) {
-            $model->calculate($_POST['filepath']);
+            $model->formMenu($_POST['filepath']);
             $res = $model->dataMenu();
             $rez = $mapper->insertToDB($res);
         } else {
             self::$error = "<h1>Вы пытаетесь загрузить файл не с официального сайта!</h1>";
         }
+        
         if ($Arr['orders'] == 1) {
             $dishes = $mapper->getMenuFromDB();
         }
-        include_once '..\\src\\layout\\layout.php';
+        
+        include_once "../src/views/view_main.php";
     }
 
     public function actionOrder() {
-        $User = new User();
+        
         if ( isset($_SESSION['user']) ) {
+        $ACL = new ACL();
+        $User = new User();
         $User = $_SESSION['user'];
-        $Arr = $User->getPermissions();
+        $Arr = $ACL->getUserPermissions($User->getLogin());
         }
         
         $dishMapper = new DishMapper();
@@ -85,16 +95,22 @@ class OrderController
             $_SESSION['order'] = $dishes;
         } else {
             self::$error = '<p>Выберите минимум одно блюдо! Для этого необходимо указать число порций!</p>';
+            if ( $Arr['admin'] == 1  && empty($_GET) ) {
+                include_once "../src/views/view_admin.php";
+            }
             $dishes = $dishMapper->getMenuFromDB();
         }
-        include_once '..\\src\\layout\\layout.php';
+        
+        include_once "../src/views/view_order.php";
     }
 
     public function actionConfirm() {
-        $User = new User();
+        
         if ( isset($_SESSION['user']) ) {
+        $ACL = new ACL();
+        $User = new User();
         $User = $_SESSION['user'];
-        $Arr = $User->getPermissions();
+        $Arr = $ACL->getUserPermissions($User->getLogin());
         }
         
         $mapper = new DishMapper();
@@ -106,26 +122,29 @@ class OrderController
             self::$error = '<p>Выберите блюдо, чтобы отправить заказ!</p>';
         }
         $dishes = $mapper->getMenuFromDB();
-        include_once '..\\src\\layout\\layout.php';
+
+        include_once "../src/views/view_main.php";
     }
 
     public function checkUser() {
-
         if ( isset($_SESSION['user']) ) {
-        $Arr = $_SESSION['roles'];
+        $ACL = new ACL();
+        $User = new User();
+        $User = $_SESSION['user'];
+        $Arr = $ACL->getUserPermissions($User->getLogin());
         }
         
         if ($Arr['user_roles'] == 1 && isset($_GET['user_roles']) &&  $_GET['user_roles'] == 1) {
             $Mapper = new UserMapper();
-            if (isset($_POST['role']) ) {
-                $Mapper->changeUserRole($_POST['role']);
-                
+            if ( isset($_POST['input_role']) ) {
+                $Mapper->changeUserRole($_POST);
             }
             $users = $Mapper->getUsersFromDB();
             $users = $users->getUsers();
             $Role = new RoleMapper();
             $roles = $Role->getRoles();
             
+
         }
         
         if ( isset($_POST['insert_role']) ) {
@@ -148,16 +167,15 @@ class OrderController
             $massive = $Roles->getRoles();
         } 
         
-        if ($Arr['orders'] == 1 && empty($_POST)) {
+        if ( $Arr['orders'] == 1  && empty($_GET) ) {
             $mapper = new DishMapper();
             $dishes = $mapper->getMenuFromDB();
         }
         
-        include_once '..\\src\\layout\\layout.php';
+        include_once "../src/views/view_main.php";
     }
     
     public function insertUser() {
-        
         $login = trim(strip_tags($_POST['login']));
         $pass = trim(strip_tags($_POST['password']));
         $FIO = trim(strip_tags($_POST['name']));
@@ -168,10 +186,8 @@ class OrderController
         
         if ( empty ($result) ) {
             $str = $user->insertUser($login, $pass, $FIO, $email);
-        } 
-        
-        include_once '..\\src\\layout\\layout.php';
-        
+        }
+        include_once "../src/views/view_main.php";
     }
 
 }

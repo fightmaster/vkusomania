@@ -11,31 +11,45 @@ use Dishes\DishCollection;
 </div>	
 
 <div class="main">
-    
 <?php
+if ($Arr['admin'] == 0 ) {
+?>
+<script>document.getElementById("main").innerHTML ="<a class='edit_user' href='index.php'>Главная</a>";</script>
+   <?php
+if ($Arr['user_roles'] == 1) {
+?>
+    <script>document.getElementById("user_roles").innerHTML ="<a class='edit_user' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
+<?php
+}
+if ($Arr['edit_roles'] == 1) {
+?>
+    <script>document.getElementById("edit_roles").innerHTML ="<a class='edit_user' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
+<?php
+}
+if ($Arr['reports'] == 1) {
+?>
+    <script>document.getElementById("reports").innerHTML ="<a class='edit_user' href='index.php?reports=1'>Отчетность</a>";</script>
+<?php 
+} 
+?>
+<script>document.getElementById("exit").innerHTML ="<a class='edit_user' href='index.php?exit=1'>Выход</a>";</script>
+<SCRIPT language=JavaScript>
+var num=0;
+</SCRIPT>
+<?php 
+}
+
+if ($_SESSION['user_name'] != "" && ($Arr['orders'] == 1) && ($Arr['admin'] == 0) || ( $_POST['order'] && ($Arr['orders'] == 1) && ($Arr['admin'] == 0) )  ) {
+    echo "<h1>ФИО пользователя - $_SESSION[user_name]</h1>";
+}
+
+if ($_SESSION['user_name'] != "" && $Arr['orders'] == 1 && $Arr['admin'] == 0 || ( ($_POST['order']) && !empty($arr) ) ) {
+    echo "<h1>ФИО пользователя - $_SESSION[user_name]</h1>";
+}
 
     if (!empty($dishes) && self::$error == "" && $_POST['order'] && !empty($arr) ) {
     ?> 
-    <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
-       <?php
-    if ($Arr['user_roles'] == 1) {
-    ?>
-        <script>document.getElementById("user_roles").innerHTML ="<a class='exit' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
-    <?php
-    }
-    if ($Arr['edit_roles'] == 1) {
-    ?>
-        <script>document.getElementById("edit_roles").innerHTML ="<a class='exit' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
-    <?php
-    }
-    if ($Arr['reports'] == 1) {
-    ?>
-        <script>document.getElementById("reports").innerHTML ="<a class='exit' href='index.php?reports=1'>Отчетность</a>";</script>
-    <?php 
-    } 
-    ?>
-        
-    <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
+
     <form action='index.php' method='post'>
     <h3>Вы заказали:</h3>
 
@@ -80,38 +94,6 @@ use Dishes\DishCollection;
         $num = count($dishes) - 1;
         $bool = true;
 
-        if(session_id() != '' && isset($_SESSION['user_name']) ) { 
-            ?>
-            <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
-            <?php
-            if ($Arr['user_roles'] == 1) {
-            ?>
-                <script>document.getElementById("user_roles").innerHTML ="<a class='exit' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
-            <?php
-            }
-            if ($Arr['edit_roles'] == 1) {
-            ?>
-                <script>document.getElementById("edit_roles").innerHTML ="<a class='exit' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
-            <?php
-            }
-            if ($Arr['reports'] == 1) {
-            ?>
-                <script>document.getElementById("reports").innerHTML ="<a class='exit' href='index.php?reports=1'>Отчетность</a>";</script>
-            <?php 
-            } 
-            ?>
-
-            <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
-        <?php 
-        } 
-        ?>
-
-
-        <SCRIPT language=JavaScript>
-         var num=0;
-        </SCRIPT>
-
-        <?php
         if (self::$error!='') {
                 echo '<h2>'.self::$error.'</h2>';
                 self::$error = '';
@@ -187,27 +169,6 @@ use Dishes\DishCollection;
         <h2>К сожалению меню не может быть сформированно!</h2>
         <p>В базе данных отсутсвуют актуальные данные на сегодня.</p>
         <p>Пожалуйста обратитесь к администратору!</p>
-        
-        <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
-        <?php
-        if ($Arr['user_roles'] == 1) {
-        ?>
-            <script>document.getElementById("user_roles").innerHTML ="<a class='exit' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
-        <?php
-        }
-        if ($Arr['edit_roles'] == 1) {
-        ?>
-            <script>document.getElementById("edit_roles").innerHTML ="<a class='exit' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
-        <?php
-        }
-        if ($Arr['reports'] == 1) {
-        ?>
-            <script>document.getElementById("reports").innerHTML ="<a class='exit' href='index.php?reports=1'>Отчетность</a>";</script>
-        <?php 
-        } 
-        ?>
-
-        <script>document.getElementById("exit").innerHTML ="<a class='exit' href='index.php?exit=1'>Выход</a>";</script>
     <?php    
     }
 } 

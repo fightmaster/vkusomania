@@ -19,7 +19,7 @@ class Converter
     const FILEPATH4 = "http://www.vkusomania.com/storage/menu.doc";
 
     //создание и форматирование TXT
-    public function calculate($filepath)
+    public function formMenu($filepath)
     {
         //считывание DOC файла
         copy($filepath, "../menu.doc");
@@ -50,14 +50,14 @@ class Converter
     {
         $array = file('../menu.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($array as $line) {
-            if (strrpos($line, "0@Pa Е") || preg_match('/(·)/', $line) || preg_match('/()/', $line) ||
+            if (strrpos($line, "0@Pa Е") || strrpos($line, "·") || ($line == '·') || ($line == '·о') || ($line == '·HYPER15Основной шрифт абзаца') ||
                     preg_match('/(летнее)?(меню)/i', $line) ||
                     preg_match('/(осеннее)?(меню)/i', $line) ||
                     preg_match('/(зимнее)?(меню)/i', $line) ||
                     preg_match('/(весеннее)?(меню)/i', $line) ||
                     preg_match('/(№)?([0-9]{1,2})$/', $line)) {
                 continue;
-            } else {
+            } else { 
                 rtrim($line);
                 rtrim($line, "\n");
                 $main[] = $line;

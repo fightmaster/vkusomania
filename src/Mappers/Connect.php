@@ -19,7 +19,7 @@ class Connect
             $my_database = 'vkusomania';
             self::$link = mysql_connect($mysql_host, $mysql_user, $mysql_password);
             mysql_select_db($my_database);
-	    }
+	}
         
         return self::$link;
     }

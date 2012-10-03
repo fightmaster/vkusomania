@@ -1,13 +1,14 @@
 <?php
-
 use Controller\OrderController;
 
-require_once("..\src\autoLoader.php");
+require_once("../src/autoLoader.php");
 error_reporting(E_ALL ^ E_NOTICE);
+
+session_start();
 
 $control = new OrderController();
 
-session_start();
+include_once "../src/layout/layout.php";
 
 if ($_POST['auto']) {
     session_start();
@@ -40,11 +41,6 @@ if (!empty($_SESSION['user_name']) && ( empty($_POST) || isset($_POST['save_role
 
 if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['name']) && isset($_POST['email'])) {
     $control->insertUser();
-}
-
-if ($_SESSION['user_name'] == '' && !isset($_POST['login']) && !isset($_POST['password']) && !isset($_POST['name']) && !isset($_POST['email'])) {
-	include_once "..\\src\\layout\\layout.php";
-        
 }
 
 ?>

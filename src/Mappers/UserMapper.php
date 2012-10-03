@@ -84,9 +84,15 @@ class UserMapper
     public function changeUserRole($role)
     {
         $link = Connect::getConnection();
-        $arr = explode("|", $role);
-        $query = "UPDATE user SET role=$arr[1] WHERE user.id=$arr[0]";
-        $result = mysql_query($query,$link) or die(mysql_error());
+        foreach ($role as $k=>$v)
+        {
+            if ( substr($k, 0, 4) == "role" ) {
+                $arr = explode("|", $v);
+                $query = "UPDATE `user` SET role=$arr[1] WHERE user.id=$arr[0]";
+                mysql_query($query,$link) or die(mysql_error());
+            }
+        }
+       
     }
     
     public function getUsersFromDB()
@@ -148,5 +154,7 @@ class UserMapper
             }
         }
     }
+    
+    
 
 }
