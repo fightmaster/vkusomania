@@ -1,64 +1,39 @@
-<div class="item">
-<div class="menu" id="main"> </div>  
-<div class="menu" id="user_roles"> </div>
-<div class="menu" id="edit_roles"> </div>
-<div class="menu" id="reports"> </div>
-<div class="menu" id="exit"> </div>
-</div>
-
-<div class="main">
-<script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
 <?php
-if ($Arr['user_roles'] == 1) {
-?>
-    <script>document.getElementById("user_roles").innerHTML ="<a class='edit_user' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
-<?php
-}
-if ($Arr['edit_roles'] == 1) {
-?>
-    <script>document.getElementById("edit_roles").innerHTML ="<a class='edit_user' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
-<?php
-}
-if ($Arr['reports'] == 1) {
-?>
-    <script>document.getElementById("reports").innerHTML ="<a class='edit_user' href='index.php?reports=1'>Отчетность</a>";</script>
-<?php 
-} 
-?>
-<script>document.getElementById("exit").innerHTML ="<a class='edit_user' href='index.php?exit=1'>Выход</a>";</script>
-    
-<?php
-
 if ($Arr['user_roles'] == 1 && $_GET['user_roles'] == 1) {
     echo "<h2>Редактор пользователей</h2>"; 
     
     ?>
 
-    <form action="index.php?user_roles=1" method="POST">
+    <form action="index.php?insert_user=1" method="POST">
     <table border>
     <tr>
-    <td>Логин:</td><td>ФИО:</td><td>Email:</td><td>Роль:</td>
+    <td>Логин:</td><td>Имя:</td><td>Фамилия:</td><td>Email:</td><td>Роль:</td>
     </tr>
     <?php
     foreach ($users as $user) {
-            ?>
-            <tr>
-                <td><?=$user->getLogin()?></td>
-                <td><?=$user->getFIO()?></td>
-                <td><?=$user->getEmail()?></td> 
-                <td><select size="1" name="role<?=$user->getId()?>">
-                    <?php foreach ($roles as $role) {if ( $role[role_name] == $user->getRole() ) {echo "<option selected value=".$user->getId()."|".$role[id].">$role[role_name]</option>";} 
-                                                     else { echo "<option value=".$user->getId()."|".$role[id].">$role[role_name]</option>";} } ?>
-                    </select></td>
-                <td><input type='submit' name="input_role" value="Переназначить роль"></td>
-           </tr>
-            <?php
+        ?>
+        <form action="index.php?user_roles=1" method="POST">
+                <tr>
+                    <td><?=$user->getLogin()?></td>
+                    <td><a href="index.php?user_edit=1&<?=$user->getId()?>"><?=$user->getName()?></td>
+                    <td><?=$user->getSurname()?></td>
+                    <td><?=$user->getEmail()?></td> 
+                    <td><select size="1" name="role">
+                        <?php foreach ($roles as $role) {if ( $role[role_name] == $user->getRole() ) {echo "<option selected value=".$user->getId()."|".$role[id].">$role[role_name]</option>";} 
+                                                         else { echo "<option value=".$user->getId()."|".$role[id].">$role[role_name]</option>";} } ?>
+                        </select></td>
+                    <td><input type='submit' name="input_role" value="Переназначить роль"></td>
+               </tr>
+        </form> 
+        <?php
     }
 
     ?>
-    </table>
-    </form>    
     
+    </table>
+    <input type='submit' id="input_role" name='new_user' value="Добавить нового пользователя"><br><br>
+    </form> 
+
     <?php
     
 }
@@ -162,6 +137,4 @@ if ($Arr['reports'] == 1 && $_GET['reports'] == 1) {
     echo "<h2>Отчет</h2>"; 
 }
 
-?>   
-</div>
-
+?>

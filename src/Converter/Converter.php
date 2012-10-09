@@ -41,7 +41,7 @@ class Converter
 
         $this->data = $this->formatTxtFile();
         $f = fopen('../menu.txt', 'w');
-        $result = implode("\r\n", $this->data);
+        $result = implode("\n", $this->data);
         fwrite($f, $result);
         fclose($f);
     }
@@ -107,6 +107,7 @@ class Converter
         $mapper = new DishMapper();
         $cat_arr = $mapper->getCategoryFromDB();
         $dishes = new DishCollection();
+
         if (is_array($results)) {
             $num = count($results);
             $bcat = false;
@@ -121,19 +122,21 @@ class Converter
                         } else {
                             $bkompleks = false;
                         }
+                        
                         $cat = trim($results[$i]);
                         $bcat = true;
-                        break;
+                        break 1;
                     }
-                }
-                if ($bcat == true) {
-                    $bcat = false;
-                    continue;
                 }
                 if (preg_match('/[0-9]{2,2}.[0-9]{2,2}.[0-9]{4,4}.+/', $results[$i])) {
                     $date = trim($results[$i]);
                     continue;
                 }
+                if ($bcat == true) {
+                    $bcat = false;
+                    continue;
+                }
+
                 if ($bkompleks == true) {
                     $kompleks = trim($results[$i]);
                     $cat = mb_substr($cat, 0, 17, 'utf-8');
@@ -152,6 +155,7 @@ class Converter
                 }
             }
         }
+        
         return $dishes;
     }
 

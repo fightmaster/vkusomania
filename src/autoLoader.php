@@ -1,9 +1,11 @@
 <?php
 spl_autoload_register(function ($className) {
 
+    $className = str_replace('\\', '/', $className);
+    
     $fileName = __DIR__ . '/' . $className . '.php'; 
    
-    $fileName = str_replace('\\', '/', $fileName); 
+     
 
     if (is_readable($fileName)) {
         require $fileName;

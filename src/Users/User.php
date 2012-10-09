@@ -5,7 +5,8 @@ class User
 {
     private $id;
     private $login;
-    private $FIO;
+    private $name;
+    private $surname;
     private $email;
     private $role;
 
@@ -30,14 +31,24 @@ class User
         $this->login = $login;
     }
     
-    public function getFIO()
+    public function getName()
     {
-        return $this->FIO;
+        return $this->name;
     }
     
-    public function setFIO($FIO)
+    public function setName($name)
     {
-        $this->FIO = $FIO;
+        $this->name = $name;
+    }
+    
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+    
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
     }
     
     public function getEmail()
