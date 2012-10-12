@@ -1,13 +1,14 @@
 <?php
-
 use Controller\OrderController;
 
-require_once("..\src\autoLoader.php");
+require_once("../src/autoLoader.php");
 error_reporting(E_ALL ^ E_NOTICE);
+
+session_start();
 
 $control = new OrderController();
 
-session_start();
+include_once "../src/layout/layout.php";
 
 if ($_POST['auto']) {
     session_start();
@@ -20,6 +21,18 @@ if (isset($_GET['exit']) && $_GET['exit'] == 1) {
     unset($_SESSION['user']);
     session_regenerate_id(); 
     setcookie(session_name(), session_id());
+}
+
+if ($_POST['edit_prof'] && $_SESSION['user_name'] != '') {
+    $control->editUser();
+}
+
+if ($_POST['new_user'] && $_SESSION['user_name'] != '' && isset($_GET['insert_user']) && $_GET['insert_user'] == 1 ) {
+    $control->showInsertUserForm();
+}
+
+if ($_POST['save_user'] && $_SESSION['user_name'] != '' && isset($_GET['insert_user']) && $_GET['insert_user'] == 1 ) {
+    $control->insertUserWithRoles();
 }
 
 if ($_POST['send'] && $_SESSION['user_name'] != '') {
@@ -38,13 +51,8 @@ if (!empty($_SESSION['user_name']) && ( empty($_POST) || isset($_POST['save_role
     $control->checkUser();
 }
 
-if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['name']) && isset($_POST['email'])) {
+if (isset($_POST['login']) && isset($_POST['password1']) && isset($_POST['name']) && isset($_POST['email'])) {
     $control->insertUser();
-}
-
-if ($_SESSION['user_name'] == '' && !isset($_POST['login']) && !isset($_POST['password']) && !isset($_POST['name']) && !isset($_POST['email'])) {
-	include_once "..\\src\\layout\\layout.php";
-        
 }
 
 ?>
