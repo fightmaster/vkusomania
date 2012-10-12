@@ -1,54 +1,74 @@
 <?php
+use Controller\OrderController;
 
-use Controllers\Controller;
-use Models\Model;
-use Views\View;
-use Dishes\Dish;
-
-require_once("..\src\AutoLoader\AutoLoader.php");
+require_once("../src/autoLoader.php");
 error_reporting(E_ALL ^ E_NOTICE);
 
-define("ADMIN", "admin");
-define("FILEPATH1", "http://vkusomania.com/storage/menu_new.doc");
-define("FILEPATH2", "http://vkusomania.com/storage/menu.doc");
-define("FILEPATH3", "http://www.vkusomania.com/storage/menu_new.doc");
-define("FILEPATH4", "http://www.vkusomania.com/storage/menu.doc");
+session_start();
 
-if ((session_id() == '')) {
+$control = new OrderController();
+
+include_once "../src/layout/layout.php";
+
+if ($_POST['auto']) {
     session_start();
+    $control->actionAuto();
 }
 
-$control = new Controller();
-		
+if ($_POST['edit_user'] && $_SESSION['user_name'] != '') {
+    $control->editUser();
+}
+
 if (isset($_GET['exit']) && $_GET['exit'] == 1) {
+    $_SESSION['user_name'] = '';
     unset($_SESSION['user_name']);
-    session_destroy();
-}	
-
-if ($_POST['send']) {
-    $control->postSend();
+    unset($_SESSION['user']);
+    session_regenerate_id(); 
+    setcookie(session_name(), session_id());
 }
 
-if ($_POST['order']) {
-    $control->postOrder();
+if ( isset($_POST['delete_user']) &&  isset($_GET['id']) ) {
+    $control->delUserForm();
 }
 
-if ($_POST['confirm']) {
-    $control->postConfirm();
+if ( isset($_GET['user_edit']) && $_GET['user_edit'] == 1 && isset($_GET['login']) ) {
+    $control->ifUserWithRoles();
 }
 
-if (isset($_SESSION['user_name'])) {
+if ( isset($_GET['user_del']) && $_GET['user_del'] == 1 && isset($_GET['login']) ) {
+    $control->delUserWithRoles();    
+}
+
+if ( isset($_GET['edit']) && $_GET['edit'] == 1 && isset($_GET['login']) ) {
+    $control->editUserWithRoles();    
+}
+
+
+if ( isset($_POST['delete_user']) &&  isset($_GET['login']) ) {
+    $control->delUserForm();
+}
+
+if ( isset($_POST['cancel']) &&  isset($_GET['login']) ) {
+    $control->delUserForm();
+}
+
+if ($_POST['send'] && $_SESSION['user_name'] != '') {
+    $control->actionSend();
+}
+
+if ($_POST['order'] && $_SESSION['user_name'] != '') {
+    $control->actionOrder();
+}
+
+if ($_POST['confirm'] && $_SESSION['user_name'] != '') {
+    $control->actionConfirm();
+}
+
+if (!empty($_SESSION['user_name']) && !isset($_GET['id']) && ( empty($_POST) || isset($_POST['save_role']) || isset($_POST['input_role']) || isset($_POST['insert_role']) )  ) {
     $control->checkUser();
 }
 
-if ($_POST['auto']) {
-    $control->postAuto();
+if (isset($_POST['login']) && isset($_POST['password']) && isset($_POST['name']) && isset($_POST['email'])) {
+    $control->insertUser();
 }
-		
-if (empty($_POST)) {
-	include "..\src\Views\ViewAuto.php";
-}
-
 ?>
-
-

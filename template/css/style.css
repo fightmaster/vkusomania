@@ -10,6 +10,12 @@ body{
 	color:black;
 }
 
+hr {
+    width:400px;
+    color: white;
+    float:left;
+}
+
 h2 {
 	
 color:red;
@@ -30,13 +36,31 @@ color:red;
 font-size:20px;
 }
 
+#btn{
+    background-color: appworkspace; 
+    float:right;
+    width:25px;
+    margin:0px;
+    padding:0px;
+    height:22px;
+}
+
+#inp{
+    width:80px;
+}
+
+#val{
+    float: left;
+    margin-top:10px;
+}
+
 #category{
 color:orange;
 font-size:18px;
 }
 
 table{
-width:900px;
+width:840px;
 }
 
 table,td,tr {
@@ -48,22 +72,36 @@ table td{
 padding-left: 5px;
 }
 
+#menu_hr{
+    width:130px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 #kol{
 text-align: center;
 }
 
 .main{
 border-right:3px solid white;
-width:905px;
+width:850px;
+}
+
+.item2{
+	display: inline-block;
+	position:absolute;
+	left:885px;
+	margin-right:30px;
+	margin-top:10px;
+    border-left:3px solid white;
 }
 
 .item{
-	background: url("../img/shadow_wide.png") no-repeat center bottom;
 	display: inline-block;
 	position:absolute;
-	left:955px;
+	left:885px;
+    top:60px;
 	margin-right:30px;
-	margin-top:10px;
 }
 
 .item .delete{
@@ -75,7 +113,7 @@ width:905px;
 	float:center;
 }
 
-.item a{
+.edit_user {
 	background-color: #FAFAFA;
 	border: none;
 	display: block;
@@ -105,24 +143,33 @@ width:905px;
   height:25px;
   background:#3e97d1;
   position:fixed;
-  left:915px;
-  top:230px;
+  left:860px;
+  top:340px;
    -moz-transform: rotate(90deg); 
   -webkit-transform: rotate(90deg); 
   -o-transform: rotate(90deg);   
 }
+
+#input_role {
+  margin-top:20px;
+  color: white;
+  height:25px;
+  background:#3e97d1;  
+}
+
 .regform {
 text-align: center;
 }
 
-.exit{
+.menu{
+padding:7px;
 text-align: center;
 }
-.exit a{
+.menu a{
 background-color:#dbdbdb;
 padding:3px;
 }
-.exit a:hover{
+.menu a:hover{
 color:orange;
 }
 
