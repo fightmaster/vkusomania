@@ -72,6 +72,12 @@ table td{
 padding-left: 5px;
 }
 
+#menu_hr{
+    width:130px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 #kol{
 text-align: center;
 }
@@ -107,7 +113,7 @@ width:850px;
 	float:center;
 }
 
-.item a{
+.edit_user {
 	background-color: #FAFAFA;
 	border: none;
 	display: block;

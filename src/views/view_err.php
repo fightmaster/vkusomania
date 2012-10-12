@@ -1,8 +1,7 @@
 <?php
-if ($str != ''){
+if ($str != '') {
     echo "<h3>$str</h3>";
 }
-foreach ($result as $line){
+foreach ($result as $line) {
     echo $line . "<br>";
 }
-?>

@@ -19,7 +19,7 @@ class DishMapper
         $cat = mysql_query($query, $link);
         $myrow = mysql_fetch_array($cat);
         //////////////////////////////////////////////////////////////////
-        
+
         if (empty($myrow)) { 
             $num = count($dishes);
 
@@ -33,7 +33,8 @@ class DishMapper
                 $cost = (integer) $dishes[$i]->getCost();
 
                 $query = "INSERT INTO menu ( cat_id, name, date, portion, cost ) 
-			 SELECT `id`, '$name' , '$date' , '$portion' , '$cost' FROM `category` WHERE category_name= '$q' ";
+                          SELECT `id`, '$name' , '$date' , '$portion' , '$cost' 
+                          FROM `category` WHERE category_name= '$q' ";
 
                 $result = mysql_query($query, $link);
             }
@@ -47,13 +48,10 @@ class DishMapper
 
     public function getCategoryFromDB()
     {
-
         $link = Connect::getConnection();
-
         $query = "SELECT category_name FROM category";
         $result = mysql_query($query, $link);
-
-        while ($myrow = mysql_fetch_array($result)) {
+        while ($myrow = mysql_fetch_assoc($result)) {
             $mass[] = $myrow['category_name'];
         }
 
@@ -63,7 +61,6 @@ class DishMapper
     public function getDateFromDB()
     {
         $link = Connect::getConnection();
-
         $date = date("Y-m-d");
         $query = "select date from menu where date >='$date' GROUP BY date ";
         $result = mysql_query($query, $link);
@@ -78,15 +75,11 @@ class DishMapper
     public function getMenuFromDB()
     {
         $link = Connect::getConnection();
-
         $date = date("Y-m-d");
-
         $query = "SELECT menu.*, category.category_name from menu 
                   inner join category on menu.cat_id = category.id where menu.date >= '$date' ORDER BY menu.id";
         $result = mysql_query($query);
-
         $num_rows = mysql_num_rows($result);
-
         if ($num_rows == 0) {
             return false;
         }
@@ -110,10 +103,8 @@ class DishMapper
     {
         $link = Connect::getConnection();
         $dishes = new DishCollection();
-        
         /////////////////////////////////////// формируем строку для вставки в запрос после IN
         $str = "";
-        
         foreach ($arr as $key => $value) {
             if ($value != 0) {
                 $key = substr($key, 1);
@@ -122,11 +113,9 @@ class DishMapper
         }
         
         $str = substr( $str, 0, strlen($str)-1 );
-
         $query = "SELECT menu.*, category.category_name from menu 
                   inner join category on menu.cat_id = category.id where menu.id in ($str)";
         $result = mysql_query($query, $link);
-        
         foreach ($arr as $key => $value) {
 
             if (!empty($value) && is_numeric($value)) {
@@ -169,7 +158,6 @@ class DishMapper
 
             $query = "insert into `order_detail` (`id_dish`, `id_order`, `num`) 
                       SELECT id, $id_Order, $num  from menu where name='$name' and date='$date'";
-            
             $result = mysql_query($query, $link);
         }
     }
@@ -181,6 +169,7 @@ class DishMapper
         $result = trim($result);
         $form = explode('.', $result);
         $result = $form[2] . '-' . $form[1] . '-' . $form[0];
+        
         return $result;
     }
 
