@@ -16,22 +16,22 @@ echo '<h1> Логин пользователя -' . $_SESSION[user_name] . '</h1
 
 echo "<h2>".self::$error."</h2>";
 
-if ($user_roles['user_roles'] == 1) {
+if ($userRoles['user_roles'] == 1) {
 ?>
     <script>document.getElementById("user_roles").innerHTML ="<a class='edit_user' href='index.php?user_roles=1'>Редактирование<br>пользователей</a>";</script>
 <?php
 }
-if ($user_roles['edit_roles'] == 1) {
+if ($userRoles['edit_roles'] == 1) {
 ?>
     <script>document.getElementById("edit_roles").innerHTML ="<a class='edit_user' href='index.php?edit_roles=1'>Редактирование<br>ролей</a>";</script>
 <?php
 }
-if ($user_roles['reports'] == 1) {
+if ($userRoles['reports'] == 1) {
 ?>
     <script>document.getElementById("reports").innerHTML ="<a class='edit_user' href='index.php?reports=1'>Отчетность</a>";</script>
 <?php
 }
-if ($user_roles['orders'] == 1 || $user_roles['admin'] == 1) {
+if ($userRoles['orders'] == 1 || $userRoles['admin'] == 1) {
 ?> 
 <script>document.getElementById("main").innerHTML ="<a class='exit' href='index.php'>Главная</a>";</script>
 <?php 
@@ -44,13 +44,13 @@ if ($user_roles['orders'] == 1 || $user_roles['admin'] == 1) {
 
 <?php
 if ($_POST['auto']) {
-    if ( $user_roles['admin'] == 1  && empty($_GET) ) {
+    if ( $userRoles['admin'] == 1  && empty($_GET) ) {
         include_once "../src/views/view_admin.php";
     }
-    if ( $user_roles['orders'] == 1  && empty($_GET) ) {
+    if ( $userRoles['orders'] == 1  && empty($_GET) ) {
         include_once "../src/views/view_order.php";
     }
-    if ($_SESSION['user_name'] != '' && $user_roles['orders'] == 0 && $user_roles['admin'] == 0 && empty($_GET) ) {
+    if ($_SESSION['user_name'] != '' && $userRoles['orders'] == 0 && $userRoles['admin'] == 0 && empty($_GET) ) {
         include_once "../src/views/view_menu.php";
     } 
     if ($_POST['Login'] == "" || $_POST['Pass'] == "" || $result == false) {
@@ -63,20 +63,20 @@ if ($_POST['auto']) {
 
 if ($_POST['send']) {    
     include_once "../src/views/view_admin.php";
-    if ( $user_roles['orders'] == 1  && empty($_GET) ) {
+    if ( $userRoles['orders'] == 1  && empty($_GET) ) {
         include_once "../src/views/view_order.php";
     }
 }
 
 if ($_POST['order']) {
-    if ( $user_roles['admin'] == 1  && empty($_GET) ) {
+    if ( $userRoles['admin'] == 1  && empty($_GET) ) {
         include_once "../src/views/view_admin.php";
     }
     include_once "../src/views/view_order.php";
 }
 
 if ($_POST['confirm'] && $_SESSION['user_name'] != '') {
-    if ( $user_roles['admin'] == 1  && empty($_GET) ) {
+    if ( $userRoles['admin'] == 1  && empty($_GET) ) {
         include_once "../src/views/view_admin.php";
     }
     include_once "../src/views/view_order.php";
@@ -92,17 +92,17 @@ if ($_POST['save_user'] && $_SESSION['user_name'] != '' && isset($_GET['insert_u
 
 
 if (!empty($_SESSION['user_name']) && ( empty($_POST) || isset($_POST['save_role']) || isset($_POST['input_role']) || isset($_POST['insert_role']) )  ) {
-    if ( $user_roles['admin'] == 1  && empty($_GET) ) {
+    if ( $userRoles['admin'] == 1  && empty($_GET) ) {
         include_once "../src/views/view_admin.php";
     }
-    if ( $user_roles['orders'] == 1  && empty($_GET) ) {
+    if ( $userRoles['orders'] == 1  && empty($_GET) ) {
         include_once "../src/views/view_order.php";
     }
-    if ($_SESSION['user_name'] != '' && $user_roles['orders'] == 0 && $user_roles['admin'] == 0 && empty($_GET) ) {
+    if ($_SESSION['user_name'] != '' && $userRoles['orders'] == 0 && $userRoles['admin'] == 0 && empty($_GET) ) {
         include_once "../src/views/view_menu.php";
     }
-    if ( $_SESSION['user_name'] != '' && ( ($user_roles['edit_roles'] == 1 && isset($_GET['edit_roles']) && $_GET['edit_roles'] == 1) ) ||
-        ( ($user_roles['user_roles'] == 1 && isset($_GET['user_roles']) && $_GET['user_roles'] == 1 ) )  || ( ($user_roles['reports'] == 1 && isset($_GET['reports']) && $_GET['reports'] == 1) ) ) {
+    if ( $_SESSION['user_name'] != '' && ( ($userRoles['edit_roles'] == 1 && isset($_GET['edit_roles']) && $_GET['edit_roles'] == 1) ) ||
+        ( ($userRoles['user_roles'] == 1 && isset($_GET['user_roles']) && $_GET['user_roles'] == 1 ) )  || ( ($userRoles['reports'] == 1 && isset($_GET['reports']) && $_GET['reports'] == 1) ) ) {
         include_once "../src/views/view_role.php";
     }
 }

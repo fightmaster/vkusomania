@@ -47,7 +47,6 @@ if ($_POST['confirm'] && $_SESSION['user_name'] != '') {
     $control->actionConfirm();
 }
 
-
 if (!empty($_SESSION['user_name']) && ( empty($_POST) || isset($_POST['save_role']) || isset($_POST['input_role']) || isset($_POST['insert_role']) )  ) {
     $control->checkUser();
 }

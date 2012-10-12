@@ -165,7 +165,6 @@ class UserMapper
     public function userAuto($Arr)
     {
         $link = Connect::getConnection();
-
         $login = trim(strip_tags($Arr['Login']));
         $pass = trim(strip_tags($Arr['Pass']));
         
@@ -175,7 +174,7 @@ class UserMapper
 
             $query = "SELECT * FROM user where login='$login' and pass='$pass'";
             $result = mysql_query($query, $link);
-            $line = mysql_fetch_array($result);
+            $line = mysql_fetch_assoc($result);
 
             if (!empty($line)) {
                 $User = new User();

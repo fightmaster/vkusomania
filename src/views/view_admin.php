@@ -27,4 +27,3 @@ if ( ($_POST['send']) && $rez == false && $model->checkPath() ) {
         <?php
     }
 }
-?>

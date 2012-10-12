@@ -1,5 +1,5 @@
 <?php
-if ($user_roles['user_roles'] == 1 && $_GET['user_roles'] == 1) {
+if ($userRoles['user_roles'] == 1 && $_GET['user_roles'] == 1) {
     echo "<h2>Редактор пользователей</h2>"; 
     
     ?>
@@ -38,7 +38,7 @@ if ($user_roles['user_roles'] == 1 && $_GET['user_roles'] == 1) {
     
 }
 
-if ($user_roles['edit_roles'] == 1 && $_GET['edit_roles'] == 1) {  
+if ($userRoles['edit_roles'] == 1 && $_GET['edit_roles'] == 1) {  
     
     echo "<h2>Редактор ролей</h2>";  
     
@@ -133,8 +133,6 @@ if ($user_roles['edit_roles'] == 1 && $_GET['edit_roles'] == 1) {
     
 }
 
-if ($user_roles['reports'] == 1 && $_GET['reports'] == 1) {
+if ($userRoles['reports'] == 1 && $_GET['reports'] == 1) {
     echo "<h2>Отчет</h2>"; 
 }
-
-?>

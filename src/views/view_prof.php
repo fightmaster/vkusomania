@@ -23,4 +23,3 @@ if ($str != '') {
 foreach ($check as $line) {
     echo $line . "<br>";
 }
-?>
