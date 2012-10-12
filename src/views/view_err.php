@@ -5,3 +5,4 @@ if ($str != '') {
 foreach ($result as $line) {
     echo $line . "<br>";
 }
+

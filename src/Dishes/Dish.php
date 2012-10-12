@@ -2,8 +2,7 @@
 
 namespace Dishes;
 
-class Dish
-{
+class Dish {
 
     private $name;
     private $date;

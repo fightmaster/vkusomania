@@ -5,8 +5,7 @@ namespace Mappers;
 use Dishes\Dish;
 use Dishes\DishCollection;
 
-class DishMapper 
-{
+class DishMapper {
 
     public function insertToDB($dishes)
     {
@@ -20,14 +19,14 @@ class DishMapper
         $myrow = mysql_fetch_array($cat);
         //////////////////////////////////////////////////////////////////
 
-        if (empty($myrow)) { 
+        if (empty($myrow)) {
             $num = count($dishes);
 
             for ($i = 0; $i < $num; $i++) {
-                
+
                 $q = $dishes[$i]->getCategory();
                 $name = $dishes[$i]->getName();
-                
+
                 $date = $this->formatDate($dishes[$i]->getDate());
                 $portion = $dishes[$i]->getPortion();
                 $cost = (integer) $dishes[$i]->getCost();
@@ -71,7 +70,7 @@ class DishMapper
 
         return $mass;
     }
-    
+
     public function getMenuFromDB()
     {
         $link = Connect::getConnection();
@@ -108,11 +107,11 @@ class DishMapper
         foreach ($arr as $key => $value) {
             if ($value != 0) {
                 $key = substr($key, 1);
-                $str .= $key . ",";     
+                $str .= $key . ",";
             }
         }
-        
-        $str = substr( $str, 0, strlen($str)-1 );
+
+        $str = substr($str, 0, strlen($str) - 1);
         $query = "SELECT menu.*, category.category_name from menu 
                   inner join category on menu.cat_id = category.id where menu.id in ($str)";
         $result = mysql_query($query, $link);
@@ -169,7 +168,7 @@ class DishMapper
         $result = trim($result);
         $form = explode('.', $result);
         $result = $form[2] . '-' . $form[1] . '-' . $form[0];
-        
+
         return $result;
     }
 
