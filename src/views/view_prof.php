@@ -17,10 +17,10 @@
 <input type='submit' id="input_role" name='edit_prof' value="Сохранить"><br><br>
 
 <?php
-if ($str != ''){
+if ($str != '') {
     echo "<h3>$str</h3>";
 }
-foreach ($check as $line){
+foreach ($check as $line) {
     echo $line . "<br>";
 }
 ?>

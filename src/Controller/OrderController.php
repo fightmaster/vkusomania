@@ -28,17 +28,32 @@ class OrderController {
 
     public function actionAuto()
     {
-
         $user = new UserMapper();
         if ($_POST['Login'] != '' && $_POST['Pass'] != '') {
             $result = $user->userAuto($_POST);
         }
 
-        $Arr = $this->formRoleMenu();
-
-        if ($result == true && $Arr['orders'] == 1) {//если обычный пользователь
+        $user_roles = $this->formRoleMenu();
+        
+        
+        if ($result == true && $user_roles['orders'] == 1) {//если обычный пользователь
             $mapper = new DishMapper();
             $dishes = $mapper->getMenuFromDB();
+        }
+        
+        if ($user_roles['orders'] == 0 && $user_roles['admin'] == 0 && $user_roles['edit_roles'] == 1
+            && $user_roles['user_roles'] == 0 && $user_roles['reports'] == 0) {
+            header("Location: index.php?edit_roles=1");
+        }
+        
+        if ($user_roles['orders'] == 0 && $user_roles['admin'] == 0 && $user_roles['edit_roles'] == 0
+            && $user_roles['user_roles'] == 1 && $user_roles['reports'] == 0) {
+            header("Location: index.php?user_roles=1");
+        }
+        
+        if ($user_roles['orders'] == 0 && $user_roles['admin'] == 0 && $user_roles['edit_roles'] == 1
+            && $user_roles['user_roles'] == 0 && $user_roles['reports'] == 0) {
+            header("Location: index.php?reports=1");
         }
 
         if (isset($_SESSION['user'])) {
@@ -50,7 +65,7 @@ class OrderController {
 
     public function actionSend()
     {
-        $Arr = $this->formRoleMenu();
+        $user_roles = $this->formRoleMenu();
 
         $mapper = new DishMapper();
 
@@ -63,7 +78,7 @@ class OrderController {
             self::$error = "<h1>Вы пытаетесь загрузить файл не с официального сайта!</h1>";
         }
 
-        if ($Arr['orders'] == 1) {
+        if ($user_roles['orders'] == 1) {
             $dishes = $mapper->getMenuFromDB();
         }
 
@@ -72,7 +87,7 @@ class OrderController {
 
     public function actionOrder()
     {
-        $Arr = $this->formRoleMenu();
+        $user_roles = $this->formRoleMenu();
 
         $dishMapper = new DishMapper();
         $dishes = $dishMapper->getConfirmOrder($_POST);
@@ -89,7 +104,7 @@ class OrderController {
 
     public function actionConfirm()
     {
-        $Arr = $this->formRoleMenu();
+        $user_roles = $this->formRoleMenu();
 
         $mapper = new DishMapper();
         $dishes = $_SESSION['order'];
@@ -106,9 +121,9 @@ class OrderController {
 
     public function checkUser()
     {
-        $Arr = $this->formRoleMenu();
+        $user_roles = $this->formRoleMenu();
 
-        if ($Arr['user_roles'] == 1 && isset($_GET['user_roles']) && $_GET['user_roles'] == 1) {
+        if ($user_roles['user_roles'] == 1 && isset($_GET['user_roles']) && $_GET['user_roles'] == 1) {
             $Mapper = new UserMapper();
             if (isset($_POST['input_role'])) {
                 $Mapper->changeUserRole($_POST['role']);
@@ -118,7 +133,7 @@ class OrderController {
             $Role = new RoleMapper();
             $roles = $Role->getRoles();
         }
-
+                
         if (isset($_POST['insert_role'])) {
             $Roles = new RoleMapper();
             $rez = $Roles->insertRole($_POST);
@@ -127,22 +142,41 @@ class OrderController {
             $Roles = new RoleMapper();
             $rez = $Roles->saveRole($_POST);
             $massive = $Roles->getRoles();
-        } else if ($_GET['id_role'] != "" && $Arr['edit_roles'] == 1 && isset($_GET['edit_roles']) && $_GET['edit_roles'] == 1) {
+        } else if ($_GET['id_role'] != "" && $user_roles['edit_roles'] == 1 && isset($_GET['edit_roles']) && $_GET['edit_roles'] == 1) {
             $Roles = new RoleMapper();
             $mass = $Roles->getRole($_GET['id_role']);
         } else if ($_GET['del_role'] != "" && isset($_GET['edit_roles']) && $_GET['edit_roles'] == 1) {
             $Roles = new RoleMapper();
             $mass = $Roles->delRole($_GET['del_role']);
             $massive = $Roles->getRoles();
-        } else if ($Arr['edit_roles'] == 1 && isset($_GET['edit_roles']) && $_GET['edit_roles'] == 1) {
+        } else if ($user_roles['edit_roles'] == 1 && isset($_GET['edit_roles']) && $_GET['edit_roles'] == 1) {
             $Roles = new RoleMapper();
             $massive = $Roles->getRoles();
         } else if (isset($_GET['prof']) && $_GET['prof'] == 1) {
             $User = new User();
             $User = $_SESSION['user'];
         }
-
-        if ($Arr['orders'] == 1 && empty($_GET)) {
+        
+        if ($user_roles['orders'] == 0 and isset($_GET['orders'])) {
+            self::$error = "Доступ закрыт!";
+        }
+        if ($user_roles['admin'] == 0 and isset($_GET['admin'])) {
+            self::$error = "Доступ закрыт!";
+        }
+        if ($user_roles['edit_roles'] == 0 and isset($_GET['edit_roles'])) {
+            self::$error = "Доступ закрыт!";
+        }
+        if ($user_roles['user_roles'] == 0 and isset($_GET['user_roles'])) {
+            self::$error = "Доступ закрыт!";
+        }
+        if ($user_roles['reports'] == 0 and isset($_GET['reports'])) {
+            self::$error = "Доступ закрыт!";
+        }
+        if ($user_roles['orders'] == 0 && $user_roles['admin'] == 0 && empty($_GET) ) {
+            self::$error = "Доступ закрыт!";
+        }
+        
+        if ($user_roles['orders'] == 1 && empty($_GET)) {
             $mapper = new DishMapper();
             $dishes = $mapper->getMenuFromDB();
         }
@@ -171,14 +205,14 @@ class OrderController {
     
     public function showInsertUserForm()
     {
-        $Arr = $this->formRoleMenu();
+        $user_roles = $this->formRoleMenu();
 
         include_once "../src/views/view_main.php";
     }
     
     public function insertUserWithRoles()
     {
-        $Arr = $this->formRoleMenu();
+        $user_roles = $this->formRoleMenu();
 
         $login = trim(strip_tags($_POST['login']));
         $pass1 = trim(strip_tags($_POST['pass']));
@@ -204,7 +238,7 @@ class OrderController {
 
     public function editUser()
     {
-        $Arr = $this->formRoleMenu();
+        $user_roles = $this->formRoleMenu();
         
         $name = trim(strip_tags($_POST['name']));
         $surname = trim(strip_tags($_POST['surname']));
@@ -238,8 +272,8 @@ class OrderController {
             $ACL = new ACL();
             $User = new User();
             $User = $_SESSION['user'];
-            $Arr = $ACL->getUserPermissions($User->getLogin());
-            return $Arr;
+            $user_roles = $ACL->getUserPermissions($User->getLogin());
+            return $user_roles;
         }
     }
 

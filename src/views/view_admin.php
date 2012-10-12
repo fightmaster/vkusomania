@@ -1,8 +1,4 @@
 <?php
-if ($_SESSION['user_name'] != "") {
-echo "<h1>ФИО пользователя - $_SESSION[user_name]</h1>";
-}
-
 if ( ($_POST['send']) && $rez == false && $model->checkPath() ) {
     ?>
     <br>

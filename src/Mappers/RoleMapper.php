@@ -10,7 +10,6 @@ class RoleMapper
         $link = Connect::getConnection();
 
         $query = "SELECT * FROM roles";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link);
         while ($myrow = mysql_fetch_assoc($result)) {
             $mass[] = $myrow;
@@ -23,7 +22,6 @@ class RoleMapper
         $link = Connect::getConnection();
 
         $query = 'SELECT * FROM `roles` WHERE `id`='.$id;
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link); 
         $myrow = mysql_fetch_assoc($result);
         
@@ -33,10 +31,8 @@ class RoleMapper
     public function delRole($id)
     {
         $link = Connect::getConnection();
-
         $query = 'DELETE FROM `roles` WHERE id='.$id;
         $result = mysql_query($query, $link); 
-
     }
     
     public function insertRole($Arr)
@@ -47,11 +43,11 @@ class RoleMapper
             return "Вы не ввели имя, которое является обязательным для заполнения!";
         }
         
-        if (!isset($Arr['orders'])) {$Arr['orders'] = '0';}
-        if (!isset($Arr['admin'])) {$Arr['admin'] = '0';}
+        if (!isset($Arr['orders']))     {$Arr['orders'] = '0';}
+        if (!isset($Arr['admin']))      {$Arr['admin'] = '0';}
         if (!isset($Arr['edit_roles'])) {$Arr['edit_roles'] = "0";}
         if (!isset($Arr['user_roles'])) {$Arr['user_roles'] = "0";}
-        if (!isset($Arr['reports'])) {$Arr['reports'] = "0";} 
+        if (!isset($Arr['reports']))    {$Arr['reports'] = "0";} 
         
         $query = "SELECT * FROM `roles` WHERE role_name='$Arr[role_name]' or orders = '$Arr[orders]' and admin = '$Arr[admin]' 
                   and edit_roles = '$Arr[edit_roles]' and user_roles = '$Arr[user_roles]' and reports = '$Arr[reports]'";
@@ -66,12 +62,12 @@ class RoleMapper
             $userRoles = $this->checkMass($Arr[user_roles]);
             $reports = $this->checkMass($Arr[reports]);
 
-
             $query = "INSERT INTO `roles` (role_name, `orders`, `admin`, `edit_roles`, `user_roles`, `reports`)
                                    VALUES (\"$role_name\", $orders, $admin, $editRoles, $userRoles, $reports)";
 
             mysql_query($query, $link) or die(mysql_error()); 
         } else {
+
             return "Такая роль уже присутствует в базе! Введите другое имя.";
         }
 
@@ -86,7 +82,6 @@ class RoleMapper
         }
         
         $query = 'SELECT * FROM `roles` WHERE id="'.$Arr['id_role'].'"';
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link); 
         $myrow1 = mysql_fetch_assoc($result);
         

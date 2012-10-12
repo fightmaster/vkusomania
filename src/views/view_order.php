@@ -9,15 +9,6 @@ var num=0;
 </SCRIPT>
 <?php 
 
-
-if ($_SESSION['user_name'] != "" && ($Arr['orders'] == 1) && ($Arr['admin'] == 0) || ( $_POST['order'] && ($Arr['orders'] == 1) && ($Arr['admin'] == 0) )  ) {
-    echo "<h1>ФИО пользователя - $_SESSION[user_name]</h1>";
-}
-
-if ($_SESSION['user_name'] != "" && $Arr['orders'] == 1 && $Arr['admin'] == 0 || ( ($_POST['order']) && !empty($arr) ) ) {
-    echo "<h1>ФИО пользователя - $_SESSION[user_name]</h1>";
-}
-
     if (!empty($dishes) && self::$error == "" && $_POST['order'] && !empty($arr) ) {
     ?> 
 
@@ -111,7 +102,7 @@ if ($_SESSION['user_name'] != "" && $Arr['orders'] == 1 && $Arr['admin'] == 0 ||
                             <tr>
                             <td><?=$i+1?></td><td><?=$dishes[$i]->getName()?></td><td><?=$date?></td>
                             <td><?=$cat?></td><td><?=$dishes[$i]->getPortion()?></td><td><?=$dishes[$i]->getCost().' руб.'?></td>
-                            <td id="inp"><input id="val" name='<?='a'.$dishes[$i]->getId()?>' size=2 value='0''><input id="btn" type="button" value="+" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;this.form.<?='a'.$dishes[$i]->getId()?>.value=(++num);" ><input id="btn" type="button" value="-" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;if(num>0){this.form.<?='a'.$dishes[$i]->getId()?>.value=(--num)};"></td>
+                            <td id="inp"><input id="val" name='<?='a'.$dishes[$i]->getId()?>' size=2 value='0'><input id="btn" type="button" value="+" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;this.form.<?='a'.$dishes[$i]->getId()?>.value=(++num);" ><input id="btn" type="button" value="-" onClick = "num=this.form.<?='a'.$dishes[$i]->getId()?>.value;if(num>0){this.form.<?='a'.$dishes[$i]->getId()?>.value=(--num)};"></td>
                             </tr>
                             <?php
                             if ($i<$num){

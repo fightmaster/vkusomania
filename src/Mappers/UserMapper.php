@@ -15,7 +15,6 @@ class UserMapper
         $link = Connect::getConnection();
         $pass = md5($pass); 
         $query = "SELECT * from user where login = '$login'";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link);
         $num_rows = mysql_num_rows($result);
         if ($num_rows == 0) {
@@ -42,7 +41,6 @@ class UserMapper
         $pass = md5($pass);
         
         $query = "SELECT * from user where login = '$login'";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link);
         $num_rows = mysql_num_rows($result);
         if ($num_rows == 0) {
@@ -115,7 +113,6 @@ class UserMapper
         $link = Connect::getConnection();
 
         $query_u = "SELECT id FROM user WHERE name= '$_SESSION[user_name]'";
-        mysql_query('SET NAMES utf8', $link);
         $user = mysql_query($query_u, $link);
         $myrow = mysql_fetch_assoc($user);
 
@@ -127,7 +124,6 @@ class UserMapper
         $link = Connect::getConnection();
 
         $query_u = "SELECT id FROM user WHERE name= '$_SESSION[user_name]'";
-        mysql_query('SET NAMES utf8', $link);
         $user = mysql_query($query_u, $link);
         $myrow = mysql_fetch_assoc($user);
 
@@ -147,7 +143,6 @@ class UserMapper
         $link = Connect::getConnection();
 
         $query = "SELECT user.*, roles.role_name from user Inner join roles on user.role=roles.id  ORDER BY user.id";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query,$link);
 
         $Users = new UserList();
@@ -179,7 +174,6 @@ class UserMapper
         if ((!empty($login)) && (!empty($pass) )) {
 
             $query = "SELECT * FROM user where login='$login' and pass='$pass'";
-            mysql_query('SET NAMES utf8', $link);
             $result = mysql_query($query, $link);
             $line = mysql_fetch_array($result);
 
@@ -187,14 +181,14 @@ class UserMapper
                 $User = new User();
                 $User->setLogin($line['login']);
                 $User->setName($line['name']);
-				$User->setSurname($line['surname']);
+                $User->setSurname($line['surname']);
                 $User->setEmail($line['email']);
                 $User->setRole($line['role']);
                 $User->setId($line['id']);
                 $ACL = new ACL();
                 $massive = $ACL->getUserPermissions($line['login']);
                 
-                $_SESSION['user_name'] = $line['name'];
+                $_SESSION['user_name'] = $line['login'];
                 $_SESSION['roles'] = $massive;
                 $_SESSION['user'] = $User;
 
@@ -219,7 +213,7 @@ class UserMapper
         } else if ($pass == "*") {
             $query = "UPDATE `user` SET login='$login', name='$name', surname='$surname',  email='$email' WHERE user.id=".$user->getId();
         }
-        mysql_query('SET NAMES utf8', $link);
+
         mysql_query($query, $link) or die(mysql_error());
         
         $user->setName($name);
