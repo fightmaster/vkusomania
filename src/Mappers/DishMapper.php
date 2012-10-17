@@ -5,8 +5,7 @@ namespace Mappers;
 use Dishes\Dish;
 use Dishes\DishCollection;
 
-class DishMapper 
-{
+class DishMapper {
 
     public function insertToDB($dishes)
     {
@@ -19,19 +18,19 @@ class DishMapper
         $cat = mysql_query($query, $link);
         $myrow = mysql_fetch_array($cat);
         //////////////////////////////////////////////////////////////////
-        
-        if (empty($myrow)) { 
+
+        if (empty($myrow)) {
             $num = count($dishes);
 
             for ($i = 0; $i < $num; $i++) {
-                
+
                 $q = $dishes[$i]->getCategory();
                 $name = $dishes[$i]->getName();
-                
+
                 $date = $this->formatDate($dishes[$i]->getDate());
                 $portion = $dishes[$i]->getPortion();
                 $cost = (integer) $dishes[$i]->getCost();
-                
+
                 $query = "INSERT INTO menu ( cat_id, name, date, portion, cost ) 
                           SELECT `id`, '$name' , '$date' , '$portion' , '$cost' 
                           FROM `category` WHERE category_name= '$q' ";
@@ -50,7 +49,6 @@ class DishMapper
     {
         $link = Connect::getConnection();
         $query = "SELECT category_name FROM category";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link);
         while ($myrow = mysql_fetch_assoc($result)) {
             $mass[] = $myrow['category_name'];
@@ -64,7 +62,6 @@ class DishMapper
         $link = Connect::getConnection();
         $date = date("Y-m-d");
         $query = "select date from menu where date >='$date' GROUP BY date ";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link);
 
         while ($myrow = mysql_fetch_array($result)) {
@@ -73,14 +70,13 @@ class DishMapper
 
         return $mass;
     }
-    
+
     public function getMenuFromDB()
     {
         $link = Connect::getConnection();
         $date = date("Y-m-d");
         $query = "SELECT menu.*, category.category_name from menu 
                   inner join category on menu.cat_id = category.id where menu.date >= '$date' ORDER BY menu.id";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query);
         $num_rows = mysql_num_rows($result);
         if ($num_rows == 0) {
@@ -111,14 +107,13 @@ class DishMapper
         foreach ($arr as $key => $value) {
             if ($value != 0) {
                 $key = substr($key, 1);
-                $str .= $key . ",";     
+                $str .= $key . ",";
             }
         }
-        
-        $str = substr( $str, 0, strlen($str)-1 );
+
+        $str = substr($str, 0, strlen($str) - 1);
         $query = "SELECT menu.*, category.category_name from menu 
                   inner join category on menu.cat_id = category.id where menu.id in ($str)";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link);
         foreach ($arr as $key => $value) {
 
@@ -148,7 +143,6 @@ class DishMapper
         $now = date("Y-m-d");
 
         $query = "insert into `order` (`id_user`, `date`) values ( $iduser, '$now' )";
-        mysql_query('SET NAMES utf8', $link);
         $result = mysql_query($query, $link);
 
         $id_Order = mysql_insert_id($link);
@@ -174,7 +168,7 @@ class DishMapper
         $result = trim($result);
         $form = explode('.', $result);
         $result = $form[2] . '-' . $form[1] . '-' . $form[0];
-        
+
         return $result;
     }
 

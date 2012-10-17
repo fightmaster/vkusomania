@@ -13,16 +13,15 @@
         <script src="../vendor/js/jquery.min.js"></script>
         <script src="../js/jquery.confirm.js"></script>
         <script src="../js/script.js"></script>
-               
-        
-        
-         <?php
-         
-            if ($_SESSION['user_name'] == '' && !isset($_POST['login']) && !isset($_POST['auto']) && !isset($_POST['password']) && !isset($_POST['name']) && !isset($_POST['email']) || $_GET['exit'] == 1) {
-                include_once "../src/views/view_auto.php";
-            }
 
-         ?>   
+
+
+        <?php
+        if ($_SESSION['user_name'] == '' && !isset($_POST['login']) && !isset($_POST['auto']) && !isset($_POST['password']) && !isset($_POST['name']) && !isset($_POST['email']) || $_GET['exit'] == 1) {
+            include_once "../src/views/view_auto.php";
+        }
+        ?>   
 
     </body>
 </html>
+

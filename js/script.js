@@ -10,6 +10,7 @@ $(document).ready(function() {
             'Фамилия:<font color="#FF0000"> *</font><br><INPUT  name="Surname" id="Surname" size="30"><br>'+
 			'Логин:<font color="#FF0000"> *</font><br><INPUT  name="Login" id="Login" size="30"><br>'+
             'Пароль:<font color="#FF0000"> *</font><br><INPUT type=password name="Pass" id="Pass" size="30" ><br>'+
+            'Повторите пароль:<font color="#FF0000">*</font><br><INPUT type=password name="r_Pass" id="r_Pass" size="30" ><br>'+
             '<span lang="en-us">E-Mail:</span><font color="#FF0000"> *</font><br><INPUT name="Email" id="Email" size="30" ><br><br><div id="asyncResult" class="result"> </div></div>',
             'buttons'	: {
                 'Регистрация'	: {
@@ -21,7 +22,7 @@ $(document).ready(function() {
                 },
                 'Выход'	: {
                     'class'	: 'gray',
-                    'action': function(){}	// Nothing to do in this case. You can as well omit the action property.
+                    'action': function(){}
                 }
             }
         });
@@ -31,24 +32,27 @@ $(document).ready(function() {
 function showAsyncRequest() {
     
     var Name   = document.getElementById("Name").value;
-	var Surname = document.getElementById("Surname").value;
+    var Surname = document.getElementById("Surname").value;
     var Login = document.getElementById("Login").value;
     var Pass  = document.getElementById("Pass").value;
+    var r_Pass  = document.getElementById("r_Pass").value;
     var Email = document.getElementById("Email").value;
     
     $.post("index.php", {
         name: Name, 
-		surname: Surname,
+	    surname: Surname,
         login: Login, 
-        password: Pass, 
+        password1: Pass,
+        password2: r_Pass, 
         email: Email
     },
     function(data) {
         document.getElementById("asyncResult").innerHTML = data;
         document.getElementById("Name").value = "";
-		document.getElementById("Surname").value = "";
+	    document.getElementById("Surname").value = "";
         document.getElementById("Login").value = "";
         document.getElementById("Pass").value = "";
+        document.getElementById("r_Pass").value = "";
         document.getElementById("Email").value = "";
     });
 }

@@ -1,28 +1,32 @@
-
 <h2>Регистрация нового пользователя</h2><br>
-<form action="index.php?edit_roles=1" method="POST">
-<h3>Имя пользователя:</h3><br>
-<input type="text" name="name" value="<?=$user->getName()?>"><br><hr>
-<h3>Фамилия пользователя:</h3><br>
-<input type="text" name="surname" value=""><br><hr>
-<h3>Логин:</h3><br>
-<input type="text" name="login" value=""><br><hr>
-<h3>Email:</h3><br>
-<input type="text" name="login" value=""><br><hr>
-<h3>Пароль:</h3><br>
-<input type="text" name="pass" value=""><br>
-<h3>Повторите пароль:</h3><br>
-<input type="text" name="epass" value=""><br><hr><br>
+<form action="index.php?insert_user=1" method="POST">
+    <h4>Имя пользователя:</h4>
+    <input type="text" name="name" value=""><br><hr>
+    <h4>Фамилия пользователя:</h4>
+    <input type="text" name="surname" value=""><br><hr>
+    <h4>Логин:</h4>
+    <input type="text" name="login" value=""><br><hr>
+    <h4>Email:</h4>
+    <input type="text" name="email" value=""><br><hr>
+    <h4>Пароль:</h4>
+    <input type="password" name="pass" value=""><br>
+    <h4>Повторите пароль:</h4>
+    <input type="password" name="r_pass" value=""><br><hr><br>
 
-<h3>Доступ к заказам:</h3><br>
-<input type="checkbox" name="orders"     value='1' ><br><hr>
-<h3>Доступ к администраторской зоне:</h3><br>
-<input type="checkbox" name="admin"      value='1' ><br><hr>
-<h3>Доступ к редактированию и добавлению ролей:</h3><br>
-<input type="checkbox" name="edit_roles" value='1' ><br><hr>
-<h3>Доступ к назначению ролей пользователям:</h3><br>
-<input type="checkbox" name="user_roles" value='1' ><br><hr>
-<h3>Доступ к просмотру отчета:</h3><br>
-<input type="checkbox" name="reports"    value='1' ><br><hr><br>
+    <p>Доступ к заказам:<input type="checkbox" checked name="orders" value='1' ></p>
+    <p>Доступ к администраторской зоне:</h4><input type="checkbox" name="admin" value='1' ></p>
+    <p>Доступ к редактированию и добавлению ролей:</h4><input type="checkbox" name="edit_roles" value='1' ></p>
+    <p>Доступ к назначению ролей пользователям:</h4><input type="checkbox" name="user_roles" value='1' ></p>
+    <p>Доступ к просмотру отчета:</h4><input type="checkbox" name="reports" value='1' ></p>
 
-<input type='submit' id="edit_prof" name='save_role' value="Сохранить">
+    <input type='submit' id="input_role" name='save_user' value="Сохранить">
+    <input type='reset'  id="input_role" value="Очистить">
+</form>
+
+<?php
+if ($str != '') {
+    echo "<h3>$str</h3>";
+}
+foreach ($check as $line) {
+    echo $line . "<br>";
+}

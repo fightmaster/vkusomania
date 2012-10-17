@@ -2,10 +2,10 @@
 
 namespace Mappers;
 
-class Connect
-{
+class Connect {
+
     private static $link;
-    
+
     /**
      * 
      * @return type
@@ -19,11 +19,12 @@ class Connect
             $my_database = 'vkusomania';
             self::$link = mysql_connect($mysql_host, $mysql_user, $mysql_password);
             mysql_select_db($my_database);
-	}
-        
+            mysql_query('SET NAMES utf8');
+        }
+
         return self::$link;
     }
 
 }
-
 ?>
+
