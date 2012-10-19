@@ -1,19 +1,19 @@
 <?php
 
 use Controller\OrderController;
+use Controller\UserController;
 
 require_once("../src/autoLoader.php");
-error_reporting(E_ALL ^ E_NOTICE);
+//error_reporting(E_ALL ^ E_NOTICE);
 
 session_start();
-
-$control = new OrderController();
 
 include_once "../src/layout/layout.php";
 
 if ($_POST['auto']) {
     session_start();
-    $control->actionAuto();
+    $controlUser = new UserController();
+    $controlUser->actionAuto();
 }
 
 if (isset($_GET['exit']) && $_GET['exit'] == 1) {
@@ -25,59 +25,73 @@ if (isset($_GET['exit']) && $_GET['exit'] == 1) {
 }
 
 if ($_POST['edit_prof'] && $_SESSION['user_name'] != '') {
-    $control->editUser();
+    $controlUser = new UserController();
+    $controlUser->editUser();
 }
 
 if (isset($_POST['delete_user']) && isset($_GET['id'])) {
-    $control->delUserForm();
+    $controlUser = new UserController();
+    $controlUser->delUserForm();
 }
 
 if (isset($_GET['user_edit']) && $_GET['user_edit'] == 1 && isset($_GET['login'])) {
-    $control->ifUserWithRoles();
+    $controlUser = new UserController();
+    $controlUser->ifUserWithRoles();
 }
 
 if (isset($_GET['user_del']) && $_GET['user_del'] == 1 && isset($_GET['login'])) {
-    $control->delUserWithRoles();
+    $controlUser = new UserController();
+    $controlUser->delUserWithRoles();
 }
 
 if (isset($_GET['edit']) && $_GET['edit'] == 1 && isset($_GET['login'])) {
-    $control->editUserWithRoles();
+    $controlUser = new UserController();
+    $controlUser->editUserWithRoles();
 }
 
 
 if (isset($_POST['delete_user']) && isset($_GET['login'])) {
-    $control->delUserForm();
+    $controlUser = new UserController();
+    $controlUser->delUserForm();
 }
 
 if (isset($_POST['cancel']) && isset($_GET['login'])) {
-    $control->delUserForm();
+    $controlUser = new UserController();
+    $controlUser->delUserForm();
 }
 
 if ($_POST['new_user'] && $_SESSION['user_name'] != '' && isset($_GET['insert_user']) && $_GET['insert_user'] == 1) {
-    $control->showInsertUserForm();
+    $controlUser = new UserController();
+    $controlUser->showInsertUserForm();
 }
 
 if ($_POST['save_user'] && $_SESSION['user_name'] != '' && isset($_GET['insert_user']) && $_GET['insert_user'] == 1) {
-    $control->insertUserWithRoles();
+    $controlUser = new UserController();
+    $controlUser->insertUserWithRoles();
 }
 
 if ($_POST['send'] && $_SESSION['user_name'] != '') {
-    $control->actionSend();
+    $controlOrder = new OrderController();
+    $controlOrder->actionSend();
 }
 
 if ($_POST['order'] && $_SESSION['user_name'] != '') {
-    $control->actionOrder();
+    $controlOrder = new OrderController();
+    $controlOrder->actionOrder();
 }
 
 if ($_POST['confirm'] && $_SESSION['user_name'] != '') {
-    $control->actionConfirm();
+    $controlOrder = new OrderController();
+    $controlOrder->actionConfirm();
 }
 
 if (!empty($_SESSION['user_name']) && ( empty($_POST) || isset($_POST['save_role']) || isset($_POST['input_role']) || isset($_POST['insert_role']) )) {
-    $control->checkUser();
+    $controlUser = new UserController();
+    $controlUser->checkUser();
 }
 
 if (isset($_POST['login']) && isset($_POST['password1']) && isset($_POST['name']) && isset($_POST['email'])) {
-    $control->insertUser();
+    $controlUser = new UserController();
+    $controlUser->insertUser();
 }
 ?>

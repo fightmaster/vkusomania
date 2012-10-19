@@ -12,9 +12,12 @@
 <div class="main">
 
     <?php
-    echo '<h1> Логин пользователя -' . $_SESSION[user_name] . '</h1>';
+    if ($_SESSION['user_name'] !="" ) {
+        echo '<h1> Логин пользователя -' . $_SESSION[user_name] . '</h1>';
+    }
 
-    echo "<h2>" . self::$error . "</h2>";
+    echo "<h2>" . $this->error . "</h2>";
+    $this->error = "";
 
     if ($userRoles['user_roles'] == 1) {
         ?>
@@ -54,6 +57,7 @@
         if ($userRoles['admin'] == 1 && empty($_GET)) {
             include_once "../src/views/view_admin.php";
         }
+        
         if ($userRoles['orders'] == 1 && empty($_GET)) {
             include_once "../src/views/view_order.php";
         }

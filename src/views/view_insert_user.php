@@ -1,4 +1,12 @@
-<h2>Регистрация нового пользователя</h2><br>
+<h2>Регистрация нового пользователя</h2>
+<?php
+if ($str != '') {
+    echo "<h3>$str</h3>";
+}
+foreach ($check as $line) {
+    echo $line . "<br>";
+}
+?>
 <form action="index.php?insert_user=1" method="POST">
     <h4>Имя пользователя:</h4>
     <input type="text" name="name" value=""><br><hr>
@@ -23,10 +31,4 @@
     <input type='reset'  id="input_role" value="Очистить">
 </form>
 
-<?php
-if ($str != '') {
-    echo "<h3>$str</h3>";
-}
-foreach ($check as $line) {
-    echo $line . "<br>";
-}
+

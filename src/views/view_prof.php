@@ -1,4 +1,5 @@
 <h2>Редактирование профиля</h2>
+
 <form action="index.php?prof=1" method="POST">
     <h3>Имя пользователя:</h3>
     <input type="text" name="name"  value="<?= $User->getName() ?>"><br><hr>
@@ -22,3 +23,4 @@ if ($str != '') {
 foreach ($check as $line) {
     echo $line . "<br>";
 }
+

@@ -120,7 +120,7 @@ class UserMapper {
     {
         $link = Connect::getConnection();
 
-        $query_u = "SELECT id FROM user WHERE name= '$_SESSION[user_name]'";
+        $query_u = "SELECT id FROM user WHERE login= '$_SESSION[user_name]'";
         $user = mysql_query($query_u, $link);
         $myrow = mysql_fetch_assoc($user);
 
@@ -238,7 +238,6 @@ class UserMapper {
         $link = Connect::getConnection();
 
         $resultat = mysql_query("SELECT * FROM `user`  WHERE login = '$login'");
-        mysql_query('SET NAMES utf8', $link);
         $array = mysql_fetch_assoc($resultat);
 
         $User = new User();

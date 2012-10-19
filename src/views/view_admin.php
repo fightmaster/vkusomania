@@ -17,9 +17,9 @@ if (($_POST['send']) && $rez == false && $model->checkPath()) {
         <input type='submit' name='send' value='Загрузить'>
     </form>
     <?php
-    if (self::$error != '') {
-        echo '<h2>' . self::$error . '</h2>';
-        self::$error = '';
+    if ($this->error != '') {
+        echo '<h2>' . $this->error . '</h2>';
+        $this->error = '';
     }
     if ($res == true && $_POST['send']) {
         ?>

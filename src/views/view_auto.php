@@ -5,12 +5,14 @@ use Controller\OrderController;
 
 <div class="main">
     <?php
+    /*
     $str = OrderController::getError();
     if ($str != '') {
         echo '<h2>' . $str . '</h2>';
         $err = '';
         OrderController::setError($err);
     }
+     */
     ?>
     <div class="item">
         <div class="delete"></div>

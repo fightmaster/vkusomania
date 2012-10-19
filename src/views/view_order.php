@@ -2,6 +2,7 @@
 
 use Controller\OrderController;
 use Dishes\DishCollection;
+
 ?>
 
 <script>document.getElementById("exit").innerHTML ="<a class='edit_user' href='index.php?exit=1'>Выход</a>";</script>
@@ -9,7 +10,7 @@ use Dishes\DishCollection;
     var num=0;
 </SCRIPT>
 <?php
-if (!empty($dishes) && self::$error == "" && $_POST['order'] && !empty($arr)) {
+if (!empty($dishes) && $this->error == "" && $_POST['order'] && !empty($arr)) {
     ?> 
 
     <form action='index.php' method='post'>
@@ -55,9 +56,9 @@ if (!empty($dishes) && self::$error == "" && $_POST['order'] && !empty($arr)) {
         $num = count($dishes) - 1;
         $bool = true;
 
-        if (self::$error != '') {
-            echo '<h2>' . self::$error . '</h2>';
-            self::$error = '';
+        if ($this->error != '') {
+            echo '<h2>' . $this->error . '</h2>';
+            $this->error = '';
         }
         if ($this->message != '') {
             echo '<h3>' . $this->message . '</h3>';
