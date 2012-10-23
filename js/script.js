@@ -40,7 +40,7 @@ function showAsyncRequest() {
     
     $.post("index.php", {
         name: Name, 
-	surname: Surname,
+	    surname: Surname,
         login: Login, 
         password1: Pass,
         password2: r_Pass, 
@@ -49,7 +49,7 @@ function showAsyncRequest() {
     function(data) {
         document.getElementById("asyncResult").innerHTML = data;
         document.getElementById("Name").value = "";
-	document.getElementById("Surname").value = "";
+	    document.getElementById("Surname").value = "";
         document.getElementById("Login").value = "";
         document.getElementById("Pass").value = "";
         document.getElementById("r_Pass").value = "";

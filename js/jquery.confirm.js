@@ -52,4 +52,5 @@
             $(this).remove();
         });
     }
+
 })(jQuery);
