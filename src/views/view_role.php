@@ -3,8 +3,6 @@ if ($userRoles['user_roles'] == 1 && $_GET['user_roles'] == 1) {
     echo "<h2>Редактор пользователей</h2>";
     ?>
 
-
-    <form action="index.php?insert_user=1" method="POST">
         <table border>
             <tr>
                 <td>Логин:</td><td>Имя:</td><td>Фамилия:</td><td>Email:</td><td>Роль:</td>
@@ -37,6 +35,7 @@ if ($userRoles['user_roles'] == 1 && $_GET['user_roles'] == 1) {
     ?>
 
         </table>
+    <form action="index.php?insert_user=1" method="POST">
         <input type='submit' id="input_role" name='new_user' value="Добавить нового пользователя"><br><br>
     </form> 
     <?php

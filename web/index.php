@@ -4,7 +4,7 @@ use Controller\OrderController;
 use Controller\UserController;
 
 require_once("../src/autoLoader.php");
-//error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ALL ^ E_NOTICE);
 
 session_start();
 
@@ -44,7 +44,7 @@ if (isset($_GET['user_del']) && $_GET['user_del'] == 1 && isset($_GET['login']))
     $controlUser->delUserWithRoles();
 }
 
-if (isset($_GET['edit']) && $_GET['edit'] == 1 && isset($_GET['login'])) {
+if ($_POST['user_edit'] && isset($_GET['edit']) && $_GET['edit'] == 1 && isset($_GET['login'])) {
     $controlUser = new UserController();
     $controlUser->editUserWithRoles();
 }

@@ -88,18 +88,13 @@ class UserController extends Controller
         $surname = trim(strip_tags($_POST['surname']));
         $email = trim(strip_tags($_POST['email']));
 
-        $user = new UserMapper();
-        $result = $user->check($login, $name, $surname, $email, $pass1, $pass2);
+        $User = new UserMapper();
+        $result = $User->check($login, $name, $surname, $email, $pass1, $pass2);
 
         if (empty($result)) {
-            $str = $user->insertUserWithRoles($login, $name, $surname, $pass1, $email, $_POST['orders'], $_POST['admin'], $_POST['edit_roles'], $_POST['user_roles'], $_POST['reports']);
+            $str = $User->insertUserWithRoles($login, $name, $surname, $pass1, $email, $_POST['orders'], $_POST['admin'], $_POST['edit_roles'], $_POST['user_roles'], $_POST['reports']);
         }
-        $user = new UserMapper;
-        $result = $user->check($login, $pass, $name, $surname, $email);
-
-        if (empty($result)) {
-            $str = $user->insertUser($login, $pass, $name, $surname, $email);
-        }
+        
         include_once "../src/views/view_main.php";
     }
 
@@ -128,6 +123,7 @@ class UserController extends Controller
 
         $ACL = new ACL();
         $A = $ACL->getUserPermissions($user->getLogin());
+        
         include_once "../src/views/view_main.php";
     }
 
@@ -143,7 +139,7 @@ class UserController extends Controller
         $pass2 = trim(strip_tags($_POST['r_pass']));
 
         $user = new UserMapper();
-        if ($pass1 != "" || $pass2 != "") {
+        if ($pass1 != "" && $pass2 != "") {
             $check = $user->check($login, $name, $surname, $email, $pass1, $pass2);
             if (empty($check)) {
                 $str = $user->updateUser($login, $name, $surname, $email, $pass1);
@@ -181,13 +177,13 @@ class UserController extends Controller
         $ACL = new ACL();
         $Arr = $ACL->getUserPermissions($User->getLogin());
 
-
         $Mapper = new UserMapper();
         $result = $Mapper->editUserRole($_GET['login'], $_POST);
         
-        $_SESSION['user_name'] = $_POST['login'];
-        $_SESSION['user'] = $Mapper->infoUser($_POST['login']);
-        
+        if ($User->getLogin() == $_GET['login']) {
+            $_SESSION['user_name'] = $_POST['login'];
+            $_SESSION['user'] = $Mapper->infoUser($_POST['login']);
+        }
 
         header("Location: index.php?user_roles=1");
     }

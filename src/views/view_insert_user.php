@@ -1,21 +1,23 @@
 <h2>Регистрация нового пользователя</h2>
 <?php
-if ($str != '') {
-    echo "<h3>$str</h3>";
-}
-foreach ($check as $line) {
-    echo $line . "<br>";
+if ($_POST['save_user']) {
+    if ($str != '') {
+        echo "<h3>$str</h3>";
+    }
+    foreach ($result as $line) {
+        echo $line . "<br>";
+    }
 }
 ?>
 <form action="index.php?insert_user=1" method="POST">
     <h4>Имя пользователя:</h4>
-    <input type="text" name="name" value=""><br><hr>
+    <input type="text" name="name" value=""><br><hr><br>
     <h4>Фамилия пользователя:</h4>
-    <input type="text" name="surname" value=""><br><hr>
+    <input type="text" name="surname" value=""><br><hr><br>
     <h4>Логин:</h4>
-    <input type="text" name="login" value=""><br><hr>
+    <input type="text" name="login" value=""><br><hr><br>
     <h4>Email:</h4>
-    <input type="text" name="email" value=""><br><hr>
+    <input type="text" name="email" value=""><br><hr><br>
     <h4>Пароль:</h4>
     <input type="password" name="pass" value=""><br>
     <h4>Повторите пароль:</h4>
